@@ -1,0 +1,7 @@
+com\mycompany\cardapiservice\CardApiService.class
+com\mycompany\cardapiservice\enums\Role.class
+com\mycompany\cardapiservice\entity\StatusCard.class
+com\mycompany\cardapiservice\entity\CardTransfer.class
+com\mycompany\cardapiservice\entity\User.class
+com\mycompany\cardapiservice\entity\Currency.class
+com\mycompany\cardapiservice\entity\Card.class
