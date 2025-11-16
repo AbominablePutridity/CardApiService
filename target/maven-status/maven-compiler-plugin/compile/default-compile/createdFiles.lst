@@ -1,7 +1,16 @@
 com\mycompany\cardapiservice\CardApiService.class
-com\mycompany\cardapiservice\enums\Role.class
 com\mycompany\cardapiservice\entity\StatusCard.class
+com\mycompany\cardapiservice\repository\UserRepository.class
 com\mycompany\cardapiservice\entity\CardTransfer.class
 com\mycompany\cardapiservice\entity\User.class
+com\mycompany\cardapiservice\dto\CurrencyDto.class
 com\mycompany\cardapiservice\entity\Currency.class
+com\mycompany\cardapiservice\controller\CardController.class
 com\mycompany\cardapiservice\entity\Card.class
+com\mycompany\cardapiservice\enums\Role.class
+com\mycompany\cardapiservice\service\CardService.class
+com\mycompany\cardapiservice\dto\CardDto.class
+com\mycompany\cardapiservice\dto\CardTransferDto.class
+com\mycompany\cardapiservice\dto\UserDto.class
+com\mycompany\cardapiservice\repository\CardRepository.class
+com\mycompany\cardapiservice\dto\StatusCardDto.class
