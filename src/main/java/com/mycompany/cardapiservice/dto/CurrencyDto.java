@@ -10,6 +10,8 @@ public class CurrencyDto {
     private String sign;
     private String name;
     
+    public CurrencyDto() {} // для сериализатора
+    
     public CurrencyDto(Currency currency) {
         id = currency.getId();
         sign = currency.getSign();

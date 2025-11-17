@@ -49,6 +49,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Card> cards = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TaskRequest> taskRequests = new ArrayList<>();
+    
     public Long getId() {
         return id;
     }
@@ -111,5 +114,13 @@ public class User {
 
     public void setCards(List<Card> cards) {
         this.cards = cards;
+    }
+
+    public List<TaskRequest> getTaskRequests() {
+        return taskRequests;
+    }
+
+    public void setTaskRequests(List<TaskRequest> taskRequests) {
+        this.taskRequests = taskRequests;
     }
 }

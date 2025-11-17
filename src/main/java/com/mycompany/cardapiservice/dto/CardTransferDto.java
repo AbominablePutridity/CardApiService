@@ -15,6 +15,8 @@ public class CardTransferDto {
     private boolean isTransfered;
     private LocalDate transferDate;
     
+    public CardTransferDto(){} // для сериализатора
+    
     public CardTransferDto(CardTransfer cardTransfer)
     {
         id = cardTransfer.getId();

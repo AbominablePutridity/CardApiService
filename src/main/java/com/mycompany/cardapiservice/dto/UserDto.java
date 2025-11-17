@@ -12,6 +12,7 @@ public class UserDto {
     private String name;
     private String patronymic;
     
+    public UserDto(){} // для сериализатора
     
     public UserDto(User user)
     {

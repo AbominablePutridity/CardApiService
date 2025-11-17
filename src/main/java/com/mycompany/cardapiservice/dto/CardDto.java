@@ -16,6 +16,8 @@ public class CardDto {
     private CurrencyDto currencyDto;
     private boolean isBlocked;
     
+    public CardDto(){} // для сериализатора
+    
     public CardDto(Card card)
     {
         id = card.getId();

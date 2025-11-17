@@ -1,20 +1,20 @@
 package com.mycompany.cardapiservice.dto;
 
-import com.mycompany.cardapiservice.entity.StatusCard;
+import com.mycompany.cardapiservice.entity.TaskStatus;
 
 /**
  *
  */
-public class StatusCardDto {
+public class TaskStatusDto {
     private Long id;
     private String name;
     
-    public StatusCardDto(){} // для сериализатора
+    public TaskStatusDto(){} // для сериализатора
     
-    public StatusCardDto(StatusCard statusCard)
+    public TaskStatusDto(TaskStatus taskStatus)
     {
-        id = statusCard.getId();
-        name = statusCard.getName();
+        id = taskStatus.getId();
+        name = taskStatus.getName();
     }
 
     public Long getId() {
@@ -31,5 +31,5 @@ public class StatusCardDto {
 
     public void setName(String name) {
         this.name = name;
-    }       
+    }
 }

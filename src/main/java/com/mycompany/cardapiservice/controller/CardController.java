@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/card")
-@Tag(name = "Card API", description = "Операции над картой")
+@Tag(name = "Апи Карты", description = "Операции над картой")
 public class CardController {
     public CardService cardService;
     
@@ -27,7 +27,7 @@ public class CardController {
         this.cardService = cardService;
     }
     
-    @GetMapping("/getAllCards")
+    @GetMapping("/user/getAllCards")
     @Operation(summary = "Получить все карты текущего пользователя (по логину)", 
                description = "Возвращает список всех карт пользователя")
     @ApiResponse(responseCode = "200", description = "Успешное получение списка")
