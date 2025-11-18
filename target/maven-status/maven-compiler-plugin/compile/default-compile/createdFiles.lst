@@ -1,5 +1,6 @@
 com\mycompany\cardapiservice\dto\OperationDto.class
 com\mycompany\cardapiservice\CardApiService.class
+com\mycompany\cardapiservice\controller\UserController.class
 com\mycompany\cardapiservice\entity\TaskRequest.class
 com\mycompany\cardapiservice\dto\TaskStatusDto.class
 com\mycompany\cardapiservice\entity\Currency.class
@@ -13,6 +14,8 @@ com\mycompany\cardapiservice\dto\CardTransferDto.class
 com\mycompany\cardapiservice\controller\TeskRequestController.class
 com\mycompany\cardapiservice\dto\UserDto.class
 com\mycompany\cardapiservice\dto\TaskRequestDto.class
+com\mycompany\cardapiservice\dto\auth\AuthorizationDto.class
+com\mycompany\cardapiservice\security\TockenSecurity.class
 com\mycompany\cardapiservice\entity\StatusCard.class
 com\mycompany\cardapiservice\repository\UserRepository.class
 com\mycompany\cardapiservice\entity\CardTransfer.class
@@ -24,4 +27,5 @@ com\mycompany\cardapiservice\repository\OperationRepository.class
 com\mycompany\cardapiservice\repository\TaskStatusRepository.class
 com\mycompany\cardapiservice\entity\Operation.class
 com\mycompany\cardapiservice\repository\CardRepository.class
+com\mycompany\cardapiservice\service\UserService.class
 com\mycompany\cardapiservice\dto\StatusCardDto.class

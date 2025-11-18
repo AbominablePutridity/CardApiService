@@ -41,5 +41,38 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.5.0</version>
         </dependency>
+        
+        <!--JWT - библиотеки-->
+        <!-- Интерфейсы, чтобы писать код. (АПИ для управления jwt) -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.13.0</version>
+        </dependency>
+        
+        <!-- Конкретная внутренняя реализация интерфейсов предыдущей зависимости -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.13.0</version>
+        </dependency>
+        
+        <!-- адаптер для встроенного сериализатора в spring boot
+        (по умолчанию в спринг-стартере используется jackson) -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.13.0</version>
+            
+            <!-- Исключаем конфликтующую зависимость Jackson 2 из jjwt-impl 
+            Т.К. spring boot 4 работает только с 3й версией jackson, а в этой последней версии
+            по умолчанию работает 2я, которая не совместима с версией jackson (в spring boot starter)-->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>
