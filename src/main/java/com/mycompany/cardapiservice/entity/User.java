@@ -40,6 +40,9 @@ public class User {
 //    @Enumerated(EnumType.STRING)
 //    private List<Role> roles = new ArrayList<>();
     
+    @Column(name = "role")
+    private String role;
+    
     @Column(name = "login")
     private String login;
     
@@ -122,5 +125,13 @@ public class User {
 
     public void setTaskRequests(List<TaskRequest> taskRequests) {
         this.taskRequests = taskRequests;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -13,6 +13,7 @@ com\mycompany\cardapiservice\dto\CardDto.class
 com\mycompany\cardapiservice\dto\CardTransferDto.class
 com\mycompany\cardapiservice\controller\TeskRequestController.class
 com\mycompany\cardapiservice\dto\UserDto.class
+com\mycompany\cardapiservice\configuration\SecurityConfig.class
 com\mycompany\cardapiservice\dto\TaskRequestDto.class
 com\mycompany\cardapiservice\dto\auth\AuthorizationDto.class
 com\mycompany\cardapiservice\security\TockenSecurity.class
@@ -21,6 +22,7 @@ com\mycompany\cardapiservice\repository\UserRepository.class
 com\mycompany\cardapiservice\entity\CardTransfer.class
 com\mycompany\cardapiservice\entity\User.class
 com\mycompany\cardapiservice\service\TaskRequestService.class
+com\mycompany\cardapiservice\security\JwtAuthenticationFilter.class
 com\mycompany\cardapiservice\dto\CurrencyDto.class
 com\mycompany\cardapiservice\entity\TaskStatus.class
 com\mycompany\cardapiservice\repository\OperationRepository.class

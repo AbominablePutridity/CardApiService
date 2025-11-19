@@ -27,11 +27,11 @@ INSERT INTO public.task_status (id, name) VALUES
 (4, 'Отклонена');
 
 -- Вставляем пользователей
-INSERT INTO public."user" (id, login, name, password, patronymic, surname) VALUES
-(1, 'ivanov', 'Иван', 'password123', 'Иванович', 'Иванов'),
-(2, 'petrov', 'Петр', 'password456', 'Петрович', 'Петров'),
-(3, 'sidorova', 'Мария', 'password789', 'Сергеевна', 'Сидорова'),
-(4, 'admin', 'Админ', 'admin', 'Системный', 'Админов');
+INSERT INTO public."user" (id, login, name, password, patronymic, surname, role) VALUES
+(1, 'ivanov', 'Иван', '$2a$10$rRhKbHxsyJ8w30b4xIkm0enTSl272Fw2HM6bvgT2g7azUOVWq.QTG', 'Иванович', 'Иванов', "USER"),
+(2, 'petrov', 'Петр', 'password456', 'Петрович', 'Петров', "USER"),
+(3, 'sidorova', 'Мария', 'password789', 'Сергеевна', 'Сидорова', "USER"),
+(4, 'admin', 'Админ', 'admin', 'Системный', 'Админов', "ADMIN");
 
 -- Вставляем карты
 INSERT INTO public.card (id, balance, is_blocked, number, validity_period, currency_id, status_card_id, user_id) VALUES

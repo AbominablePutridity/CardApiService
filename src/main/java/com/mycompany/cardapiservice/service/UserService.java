@@ -5,6 +5,7 @@ import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.UserRepository;
 import com.mycompany.cardapiservice.security.TockenSecurity;
 import java.util.Optional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private UserRepository userRepository;
+     private PasswordEncoder passwordEncoder;
     
-    public UserService(UserRepository userRepository)
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder)
     {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     
     /**
@@ -26,16 +29,23 @@ public class UserService {
      */
     public String findUserByAuthData(AuthorizationDto userAuthData)
     {
-        Optional<User> currentUser = userRepository.findByLogin(userAuthData.getLogin());
+        //System.out.println("10001 -> " + passwordEncoder.encode("password123").toString());
         
-        if ((!currentUser.isEmpty()) && (currentUser.get().getPassword().equals(userAuthData.getPassword())))
-        {
-            // Создаем токен
-            String token = TockenSecurity.createToken("ivan", "admin");
+         Optional<User> currentUser = userRepository.findByLogin(userAuthData.getLogin());
+        
+        if (currentUser.isPresent()) {
+            User user = currentUser.get();
             
-            return token;
-        } else {
-            return null;
+            //используем passwordEncoder!
+            if (passwordEncoder.matches(userAuthData.getPassword(), user.getPassword())) {
+                
+                System.out.println("Login cur user = " + user.getLogin());
+                System.out.println("Role cur user = " + user.getRole());
+
+                // И используем реальные данные пользователя, а не хардкод!
+                return TockenSecurity.createToken(user.getLogin(), user.getRole());
+            }
         }
+        return null;
     }
 }

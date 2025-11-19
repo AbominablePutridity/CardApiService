@@ -74,5 +74,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!--Spring security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>4.0.0-RC2</version>
+        </dependency>
     </dependencies>
 </project>
