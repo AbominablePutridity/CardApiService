@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -133,5 +134,31 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+    
+    /**
+     * Переопределяем сдесь equals() тк используем эквивалентное сравнение классов
+     * в сервисе CardTransferService чтобы выяснить, принадлежит ли карта
+     * текущему пользователю, вошедшему в систему
+     * @param o
+     * @return 
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+               Objects.equals(name, user.name) &&
+               Objects.equals(surname, user.surname) &&
+               Objects.equals(patronymic, user.patronymic) &&
+               Objects.equals(role, user.role) &&
+               Objects.equals(login, user.login) &&
+               Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, patronymic, role, login, password);
     }
 }

@@ -48,4 +48,22 @@ public class UserService {
         }
         return null;
     }
+    
+    /**
+     * Возвращает обьект из БД текущего пользователя по его логину.
+     * @param userLogin Логин текущего пользователя.
+     * @return Обьект пользователя.
+     */
+    public User getCurrentUserByLogin(String userLogin)
+    {
+        Optional<User> currentUser = userRepository.findByLogin(userLogin);
+        
+        if(!currentUser.isEmpty()) {
+            return currentUser.get();
+        } else {
+            System.out.println("UserService.getCurrentUserByLogin() -> ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ ПУСТОЙ!!!");
+            
+            return null;
+        }
+    }
 }

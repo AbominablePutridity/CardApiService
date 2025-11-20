@@ -2,19 +2,18 @@ package com.mycompany.cardapiservice.controller;
 
 import com.mycompany.cardapiservice.dto.TaskRequestDto;
 import com.mycompany.cardapiservice.entity.User;
-import com.mycompany.cardapiservice.repository.UserRepository;
 import com.mycompany.cardapiservice.service.TaskRequestService;
+import com.mycompany.cardapiservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,15 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Апи Заявки пользователей", description = "Операции над заявками пользователей администраторам")
 public class TeskRequestController {
     private TaskRequestService taskRequestService; 
-    private UserRepository userRepository;
+    private UserService userService;
     
     public TeskRequestController(
             TaskRequestService taskRequestService,
-            UserRepository userRepository
+            UserService userService
     )
     {
         this.taskRequestService = taskRequestService;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
     
     @PostMapping("/user/setTask")
@@ -41,12 +40,12 @@ public class TeskRequestController {
                description = "Возвращает статус выполнения сохранения заявки")
     @ApiResponse(responseCode = "200", description = "Успешное сохранение заявки")
     public ResponseEntity<?> createTaskRequest(
-            @Parameter(
-                description = "Логин текущего пользователя",
-                example = "",
-                required = true
-            )
-            @RequestParam(value = "userLogin") String userLogin,
+//            @Parameter(
+//                description = "Логин текущего пользователя",
+//                example = "",
+//                required = true
+//            )
+//            @RequestParam(value = "userLogin") String userLogin,
             
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                 content = @Content(
@@ -65,10 +64,11 @@ public class TeskRequestController {
                     )
                 )
             )
-            @RequestBody TaskRequestDto taskRequestDto
+            @RequestBody TaskRequestDto taskRequestDto,
+            Authentication authentication //берем данные текущего пользователя для логина
     )
     {
-        User currentUser = userRepository.findByLogin(userLogin).get();
+        User currentUser = userService.getCurrentUserByLogin(authentication.getName());
         
         return ResponseEntity.ok(
                 taskRequestService.createTask(taskRequestDto, currentUser)
