@@ -1,6 +1,7 @@
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\CardApiService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\configuration\SecurityConfig.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\CardController.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\CardTransferController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\TeskRequestController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\UserController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\auth\AuthorizationDto.java
@@ -22,6 +23,7 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\entity\User.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\enums\Role.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\CardRepository.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\CardTransferRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\OperationRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\TaskRequestRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\TaskStatusRepository.java
@@ -29,5 +31,6 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\security\JwtAuthenticationFilter.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\security\TockenSecurity.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CardService.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CardTransferService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\TaskRequestService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\UserService.java

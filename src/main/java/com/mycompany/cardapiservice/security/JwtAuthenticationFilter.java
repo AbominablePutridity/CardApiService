@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Фильтр JWT тоенов для внедрения в конфигурацию приложения для настройки JWT
+ * Фильтр JWT токенов для внедрения в конфигурацию приложения Spring Security.
+ * Этот фильтр перехватывает каждый HTTP-запрос, извлекает JWT-токен из заголовка Authorization,
+ * валидирует его и устанавливает контекст безопасности Spring.
  * @author User
  */
 @Component
@@ -26,39 +28,53 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   FilterChain filterChain) throws ServletException, IOException {
         
         System.out.println("=== JWT FILTER WORKING ===");
-        System.out.println("Request: " + request.getRequestURI());
+        System.out.println("Request URI: " + request.getRequestURI()); // Логируем URI запроса
         
-        //Берем заголовок с токеном пользователя
+        // 1. Берем заголовок Authorization с токеном пользователя
         String authHeader = request.getHeader("Authorization");
-        System.out.println("Auth Header: " + authHeader);
         
-        //Проверяем - если заголовок с токеном не null и начинается с "Barer "
+        //если заголовок с ключом Authorization (для постмана и сторонних систем) пустой, то берем заголовок из API эндпоинта
+        if(authHeader == null) {
+            authHeader = request.getHeader("X-Api-Token"); //токен из поя эндпоинта
+        }
+        
+        System.out.println("Auth Header: " + (authHeader != null ? authHeader : "Header is null"));
+        
+        // 2. Проверяем наличие заголовка и его формат (должен начинаться с "Bearer ")
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            //Урезаем в строке с токеном "Barer " для того чтобы получить только чистый токен
+            // 3. Извлекаем чистый токен, убирая префикс "Bearer " (длина "Bearer " - 7 символов)
             String token = authHeader.substring(7);
-            System.out.println("Token received: " + token.substring(0, 10) + "...");
+            System.out.println("Token received: " + token.substring(0, Math.min(token.length(), 10)) + "...");
             
-            //проверяем токен на валидность
+            // 4. Проверяем токен на валидность с помощью утилитарного класса TockenSecurity
             if (TockenSecurity.isTokenValid(token)) {
                 
-                // если токен валиден то берем из него логин и роль и записываем в лист, который передаем в spring Security
+                // 5. Если токен валиден, извлекаем из него логин (username) и роль
                 String username = TockenSecurity.validateTokenAndGetUsername(token);
                 String role = TockenSecurity.getRoleFromToken(token);
                 System.out.println("Token valid! User: " + username + ", Role: " + role);
                 
+                // 6. Создаем список GrantedAuthority (ролей/прав доступа) для Spring Security.
+                // Важно: Spring Security автоматически добавляет префикс ROLE_ при использовании hasAnyRole(),
+                // поэтому мы должны добавить его здесь вручную.
                 List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+                
+                // 7. Создаем объект аутентификации Spring Security
                 UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(username, null, authorities);
                 
+                // 8. Устанавливаем объект аутентификации в текущий контекст безопасности.
+                // Это позволяет остальной части приложения (включая SecurityConfig) знать, кто этот пользователь и какие у него роли.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 System.out.println("Authentication set in SecurityContext");
             } else {
                 System.out.println("Token invalid!");
             }
         } else {
-            System.out.println("No Bearer token found");
+            System.out.println("No Bearer token found or incorrect format");
         }
         
+        // 9. Продолжаем цепочку фильтров. Запрос пойдет дальше к контроллеру или другим фильтрам Spring Security.
         filterChain.doFilter(request, response);
     }
 }

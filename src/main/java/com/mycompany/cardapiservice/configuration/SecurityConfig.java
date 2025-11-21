@@ -4,6 +4,8 @@ import com.mycompany.cardapiservice.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,7 +41,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/user/login", "/public/**", "/static/**",
+                    .requestMatchers("/api/users/guest/getEntryTocken", "/public/**", "/static/**",
                             "/swagger-ui/**",       // ВСЕ страницы Swagger UI
                             "/v3/api-docs/**",      // OpenAPI спецификация
                             "/swagger-ui.html"     // Главная страница Swagger
@@ -59,4 +61,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) //отключение csrf токенов для пост запросов (по умолчанию требует, иначе будет 403)
                 .build();
     }
+    
+    // Добавим бин с аутентификацией по JWT
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 }

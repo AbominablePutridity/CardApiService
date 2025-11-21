@@ -25,7 +25,7 @@ public class UserController {
         this.userService = userService;
     }
     
-    @PostMapping("/user/login")
+    @PostMapping("/guest/getEntryTocken")
     @Operation(summary = "Получить токен по логину и паролю", 
                description = "Возвращает статус выполнения сохранения заявки")
     private String getTockenByAuth(
