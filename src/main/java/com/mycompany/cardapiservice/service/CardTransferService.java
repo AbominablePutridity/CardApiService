@@ -19,45 +19,87 @@ import org.springframework.stereotype.Service;
 public class CardTransferService {
     private CardTransferRepository cardTransferRepository;
     private CardService cardService;
-//    private UserRepository userRepository;
     
     public CardTransferService(CardTransferRepository cardTransferRepository, CardService cardService, UserRepository userRepository)
     {
         this.cardTransferRepository = cardTransferRepository;
         this.cardService = cardService;
-//        this.userRepository = userRepository;
     }
     
     /**
-     * 
-     * @param cardTransferData
-     * @param currentUser
+     * Метод отвечающий за перевод средств между пользовательскими картами.
+     * @param cardTransferData Данные перевода.
+     * @param currentUser Обьект текущего пользователя из Security модуля.
+     * @return Статус выполения.
      */
     public ResponseEntity<?> setCardTransfer(CardTransferDto cardTransferData, User currentUser)
     {
         // сначала проверим, что карта отправителя действительно принадлежит отправителю
         // для этого из обьекта возьмем номер карты и проверим какой у нее пользователь
+        
+        //карта отправителя
         Card senderCard = cardService.getCardByNumber(cardTransferData.getSenderDto().getNumber());
         
         //если пользователь карты эквивалентен текущему пользователю портала, то проводим транзакцию перевода
         //иначе выводим ограничение доступа с сообщением.
         if(senderCard.getUser().equals(currentUser))
-        {
-            //TODO: СДЕЛАТЬ ПРОВЕРКУ СЧЕТА НА КОРРЕКТНЫЕ ЗНАЧЕНИЯ СУММЫ ПЕРЕВОДА!!! 
-            
-            CardTransfer newTransfer = new CardTransfer();
-            newTransfer.setAmountOfMoney(cardTransferData.getAmountOfMoney());
-            newTransfer.setDescription(cardTransferData.getDescription());
-            newTransfer.setSender(senderCard);
-            newTransfer.setReceiver(cardService.getCardByNumber(cardTransferData.getReceiverDto().getNumber()));
-            newTransfer.setTransferDate(LocalDate.now());
-            newTransfer.setIsTransfered(false);
+        {         
+            //карта получателя
+            Card receiverCard = cardService.getCardByNumber(cardTransferData.getReceiverDto().getNumber());
+                
+            //данные о переводе
+            Long amount = cardTransferData.getAmountOfMoney(); //количество переводимых денег
+            String description = cardTransferData.getDescription(); //сообщение получателю от отправителя денег
+        
+            if(cardService.transferMoney(senderCard, receiverCard, amount)) {
+                if(saveNewTranzactionTransferMoney(amount, description, senderCard, receiverCard)) {
+                    return ResponseEntity.status(HttpStatus.OK)
+                    .body("Перевод был успешно осуществлен!");
+                } else {
+                    return ResponseEntity.status(HttpStatus.OK)
+                    .body("Деньги были отправлены без сохранения транзакции в таблице CardTransfer");
+                }
+            } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("ОШИБКА: Деньги не были отправлены! Возможно вы ввели некорректную сумму перевода");
+            } 
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body("Карта не принадлежит текущему пользователю");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("ОШИБКА: Отправитель был неверно указан!");
+        }
+    }
+    
+    /**
+     * Сохранение транзакции перевода денежных средств с карты на кату.
+     * @param amount Количество денег перевода
+     * @param desctiption Сообщение перевода от отправителя
+     * @param sender Карта отправителя
+     * @param receiver Карта получателя
+     * @return транзакция пройдена - true, не пройдена - false.
+     */
+    public boolean saveNewTranzactionTransferMoney(
+            Long amount,
+            String desctiption,
+            Card sender,
+            Card receiver
+    )
+    {
+        try {
+            CardTransfer newTransfer = new CardTransfer();
+            newTransfer.setAmountOfMoney(amount);
+            newTransfer.setDescription(desctiption);
+            newTransfer.setSender(sender);
+            newTransfer.setReceiver(receiver);
+            newTransfer.setTransferDate(LocalDate.now());
+            newTransfer.setIsTransfered(true);
+            
+            cardTransferRepository.save(newTransfer);
+        } catch (Throwable t) {
+            System.out.println("ОШИБКА: CardTransferService.saveNewTranzactionTransferMoney() - обьект перевода денег не был сохранен - " + t.getMessage());
+            
+            return false;
         }
         
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("Перевод был успешно осуществлен!");
+        return true;
     }
 }

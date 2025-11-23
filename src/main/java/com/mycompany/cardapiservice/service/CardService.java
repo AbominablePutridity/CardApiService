@@ -54,4 +54,36 @@ public class CardService {
             return null;
         }
     }
+    
+    /**
+     * Метод с переводом денег с карты на карту.
+     * @param sender Карта отправителя.
+     * @param receiver Карта получателя.
+     * @param amount Количество переводимых денег.
+     * @return переведен успешно - true, не переведен - false.
+     */
+    public boolean transferMoney(Card sender, Card receiver, Long amount)
+    {
+        try {
+            //TODO: СДЕЛАТЬ ПРОВЕРКУ СЧЕТА НА КОРРЕКТНЫЕ ЗНАЧЕНИЯ СУММЫ ПЕРЕВОДА!!! 
+            //если введено количество переводимых денег с карты пользователя меньше чем денег на самой карте пользователя,
+            //то делаем транзакцию отправки денег, иначе выводим
+            if((sender.getBalance() > amount) && (amount > 0)) {
+
+                //Отнимаем деньги у пользователся в связи с переводом
+                sender.setBalance(sender.getBalance() - amount);
+                cardRepository.save(sender);
+
+                //Прибавляем сумму перевода на катру получателя
+                receiver.setBalance(receiver.getBalance() + amount);
+                cardRepository.save(receiver);
+            }
+        } catch (Throwable t) {
+            System.out.println("ОШИБКА: CardService.transferMoney() - обьект перевода денег не был сохранен - " + t.getMessage());
+            
+            return false;
+        }
+        
+        return true;
+    }
 }
