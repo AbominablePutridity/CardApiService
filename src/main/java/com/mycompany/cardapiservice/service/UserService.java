@@ -1,10 +1,15 @@
 package com.mycompany.cardapiservice.service;
 
+import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.dto.auth.AuthorizationDto;
 import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.UserRepository;
 import com.mycompany.cardapiservice.security.TockenSecurity;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private UserRepository userRepository;
-     private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder)
     {
@@ -65,5 +70,24 @@ public class UserService {
             
             return null;
         }
+    }
+    
+    /**
+     * Возвращает список пользователей по фильтрам.
+     * @param login Логин пользователя.
+     * @param surname Фамилия пользователя.
+     * @param name Имя пользователя.
+     * @param patronymic Отчество пользователя.
+     * @param pageable Пагинация.
+     * @return Лист пользователей по фильтрации.
+     */
+    public List<UserDto> getAllUsersByFilter(String login, String surname, String name, String patronymic, Pageable pageable)
+    {
+        Page<User> page = userRepository.findAllByFilters(login, surname, name, patronymic, pageable);
+        
+        return page.stream().map((user) -> {
+            return new UserDto(user);
+        })
+        .collect(Collectors.toList());
     }
 }

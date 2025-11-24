@@ -61,7 +61,7 @@ public class CardTransferService {
                 }
             } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("ОШИБКА: Деньги не были отправлены! Возможно вы ввели некорректную сумму перевода");
+                    .body("ОШИБКА: Деньги не были отправлены! Возможно вы ввели некорректную сумму перевода или карта отправителя или получателя - заблокированны");
             } 
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

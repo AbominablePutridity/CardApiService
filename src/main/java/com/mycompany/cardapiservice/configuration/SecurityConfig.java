@@ -49,6 +49,9 @@ public class SecurityConfig {
                     .permitAll() // эти страницы доступны всем
 
                     .requestMatchers("/api/card/user/**").hasAnyRole("USER") // только для пользователей
+                        
+                    .requestMatchers("/api/users/admin/**").hasAnyRole("ADMIN") // только для пользователей
+                        
                     .anyRequest().authenticated() // остальные только для вошедших
                 )
                 

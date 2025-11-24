@@ -70,16 +70,30 @@ public class CardService {
             //то делаем транзакцию отправки денег, иначе выводим
             if((sender.getBalance() > amount) && (amount > 0)) {
 
-                //Отнимаем деньги у пользователся в связи с переводом
-                sender.setBalance(sender.getBalance() - amount);
-                cardRepository.save(sender);
+                //если карта отправителя не заблокированна
+                if(!sender.getIsIsBlocked()) {
+                    //Отнимаем деньги у пользователся в связи с переводом
+                    sender.setBalance(sender.getBalance() - amount);
+                    cardRepository.save(sender);
+                } else {
+                    System.err.println("ОШИБКА: Карта отправителя заблокированна, перевод не выполнен!");
+                    
+                    return false;
+                }
 
-                //Прибавляем сумму перевода на катру получателя
-                receiver.setBalance(receiver.getBalance() + amount);
-                cardRepository.save(receiver);
+                //если карта получателя не заблокированна
+                if(!receiver.getIsIsBlocked()) {
+                    //Прибавляем сумму перевода на катру получателя
+                    receiver.setBalance(receiver.getBalance() + amount);
+                    cardRepository.save(receiver);
+                } else {
+                    System.err.println("ОШИБКА: Карта получателя заблокированна, перевод не выполнен!");
+                    
+                    return false;
+                }
             }
         } catch (Throwable t) {
-            System.out.println("ОШИБКА: CardService.transferMoney() - обьект перевода денег не был сохранен - " + t.getMessage());
+            System.err.println("ОШИБКА: CardService.transferMoney() - обьект перевода денег не был сохранен - " + t.getMessage());
             
             return false;
         }
