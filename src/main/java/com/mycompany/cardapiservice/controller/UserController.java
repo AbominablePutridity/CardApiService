@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -103,5 +105,20 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size);
         
         return userService.getAllUsersByFilter(login, surname, name, patronymic, pageable);
+    }
+    
+    @PutMapping("/admin/refreshFullUser")
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public ResponseEntity<?> refreshFullUser(
+            @RequestParam(value = "id", required = true) Long id,
+            @RequestBody UserDto userDto
+    )
+    {
+        return userService.refreshFullUser(id, userDto);
     }
 }

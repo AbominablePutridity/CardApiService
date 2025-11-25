@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -89,5 +90,53 @@ public class UserService {
             return new UserDto(user);
         })
         .collect(Collectors.toList());
+    }
+    
+    /**
+     * Обновить пользователя целиком (заменить обьект целиком - для put запроса).
+     * @param idUserForUpdate Id пользователя для обновления.
+     * @param refreshedUser Обьект пользователя доля обновления.
+     * @return Статус выполнения.
+     */
+    public ResponseEntity<?> refreshFullUser(Long idUserForUpdate, UserDto refreshedUser)
+    {
+        User user = userRepository.findById(idUserForUpdate).get();
+        
+        try {
+            if(refreshedUser.getSurname() != null)
+            {
+                user.setSurname(refreshedUser.getSurname());
+            }
+
+            if(refreshedUser.getName() != null)
+            {
+                user.setName(refreshedUser.getName());
+            }
+
+            if(refreshedUser.getPatronymic() != null)
+            {
+                user.setPatronymic(refreshedUser.getPatronymic());
+            }
+
+            if(refreshedUser.getRole() != null)
+            {
+                user.setRole(refreshedUser.getRole());
+            }
+
+            if(refreshedUser.getLogin() != null)
+            {
+                user.setLogin(refreshedUser.getLogin());
+            }
+            
+            userRepository.save(user);
+        } catch (Throwable t)
+        {
+            System.err.println("ОШИБКА: UserService.refreshFullUser() проверка полей вызвало исключение: " + t.getMessage());
+            
+            return ResponseEntity.badRequest()
+               .body("Ошибка при обновлении пользователя: " + t.getMessage());
+        }
+        
+        return ResponseEntity.ok("пользователь успешно обновлен!");
     }
 }

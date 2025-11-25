@@ -11,6 +11,7 @@ public class UserDto {
     private String surname;
     private String name;
     private String patronymic;
+    private String role;
     
     public UserDto(){} // для сериализатора
     
@@ -21,6 +22,7 @@ public class UserDto {
         surname = user.getSurname();
         name = user.getName();
         patronymic = user.getPatronymic();
+        role = user.getRole();
     }
 
     public Long getId() {
@@ -61,5 +63,13 @@ public class UserDto {
 
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
