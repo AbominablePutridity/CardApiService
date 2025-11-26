@@ -23,4 +23,20 @@ public interface CardRepository extends JpaRepository<Card, Long>{
     
     @Query("SELECT c FROM Card c WHERE c.number = :number")
     public Optional<Card> getCardByNumber(@Param("number") String numberCard);
+    
+    @Query("SELECT c FROM Card c WHERE (:number IS NULL OR c.number = :number)"
+            + " AND (:isBlocked IS NULL OR c.isBlocked = :isBlocked)"
+            + " AND (:userLogin IS NULL OR c.user.login = :userLogin)"
+            + " AND (:userName IS NULL OR c.user.name = :userName)"
+            + " AND (:userSurname IS NULL OR c.user.surname = :userSurname)"
+            + " AND (:userPatronymic IS NULL OR c.user.patronymic = :userPatronymic)")
+    public Page<Card> getCardByUserData(
+            @Param("number") String cardNumber,
+            @Param("isBlocked") Boolean cardIsBlocked,
+            @Param("userLogin") String userLogin,
+            @Param("userName") String userName,
+            @Param("userSurname") String userSurname,
+            @Param("userPatronymic") String userPatronymic,
+            Pageable pageable
+    );
 }

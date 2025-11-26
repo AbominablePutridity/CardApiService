@@ -60,4 +60,64 @@ public class CardController {
         
         return cardService.prepareUserCards(authentication.getName(), pageable);
     }
+    
+    @GetMapping("/admin/getUserCards")
+    @Operation(
+        summary = "Получить все карты текущего пользователя (по данным пользователя - для админов)", 
+        description = "Возвращает список всех карт пользователя"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public List<CardDto> getCardsByUserData(
+            @Parameter(
+                description = "Номер карты пользователя"
+            )
+            @RequestParam(value = "cardNumber", required = false) String cardNumber,
+            
+            @Parameter(
+                description = "Поиск по блокировке карты пользователя"
+            )
+            @RequestParam(value = "cardIsBlocked", required = false) Boolean cardIsBlocked,
+            
+            @Parameter(
+                description = "Логин пользователя карты"
+            )
+            @RequestParam(value = "userLogin", required = false) String userLogin,
+            
+            @Parameter(
+                description = "Имя пользователя карты"
+            )
+            @RequestParam(value = "userName", required = false) String userName,
+            
+            @Parameter(
+                description = "Фамилия пользователя карты"
+            )
+            @RequestParam(value = "userSurname", required = false) String userSurname,
+            
+            @Parameter(
+                description = "Отчество пользователя карты"
+            )
+            @RequestParam(value = "userPatronymic", required = false) String userPatronymic,
+            
+            @Parameter(
+                description = "Номер страницы (начинается с 0)",
+                example = "0"
+            )
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            
+            @Parameter(
+                description = "Размер страницы",
+                example = "10"
+            )
+            @RequestParam(value = "size", defaultValue = "10") int size
+    )
+    {
+        Pageable pageable = PageRequest.of(page, size);
+        
+        return cardService.getCardsByUserData(cardNumber, cardIsBlocked, userLogin, userName, userSurname, userPatronymic, pageable);
+    }
 }

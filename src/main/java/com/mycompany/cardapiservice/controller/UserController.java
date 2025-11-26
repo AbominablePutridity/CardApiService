@@ -13,7 +13,9 @@ import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -108,6 +110,10 @@ public class UserController {
     }
     
     @PutMapping("/admin/refreshFullUser")
+    @Operation(
+        summary = "Обновить (полностью) данные о конкретном пользователе", 
+        description = "Возвращает список всех карт пользователя"
+    )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
@@ -115,10 +121,72 @@ public class UserController {
             required = true
     )
     public ResponseEntity<?> refreshFullUser(
+            @Parameter(
+                description = "Id пользователя для обновления"
+            )
             @RequestParam(value = "id", required = true) Long id,
+            
+            @Parameter(
+                description = "Обьект пользователя в формате json"
+            )
             @RequestBody UserDto userDto
     )
     {
-        return userService.refreshFullUser(id, userDto);
+        try {
+            return userService.refreshUser(id, userDto, false);
+        } catch (Throwable t)
+        {
+            System.err.println("ОШИБКА: UserController.refreshFullUser() - метод принимает целый обьект в формате json: " + t.getMessage());
+            
+            return ResponseEntity.badRequest()
+                    .body("ОШИБКА - json составлен неправильно (принимает полноценный обьект)");
+        }
+    }
+    
+    @PatchMapping("/admin/refreshPartUser")
+    @Operation(
+        summary = "Обновить (частично) данные о конкретном пользователе", 
+        description = "Возвращает список всех карт пользователя"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public ResponseEntity<?> refreshPartUser(
+            @Parameter(
+                description = "Id пользователя для обновления"
+            )
+            @RequestParam(value = "id", required = true) Long id,
+            
+            @Parameter(
+                description = "Обьект пользователя в формате json"
+            )
+            @RequestBody UserDto userDto
+    )
+    {
+        return userService.refreshUser(id, userDto, true);
+    }
+    
+    @DeleteMapping("/admin/deleteUser")
+    @Operation(
+        summary = "Удалить конкретного пользователя по его Id", 
+        description = "Возвращает список всех карт пользователя"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public ResponseEntity<?> deleteUser(
+            @Parameter(
+                description = "Id пользователя для удаления"
+            )
+            @RequestParam(value = "id", required = true) Long idUserForDelete
+    )
+    {
+        return userService.deleteUser(idUserForDelete);
     }
 }

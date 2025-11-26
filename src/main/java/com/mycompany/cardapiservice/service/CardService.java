@@ -5,13 +5,19 @@
 package com.mycompany.cardapiservice.service;
 
 import com.mycompany.cardapiservice.dto.CardDto;
+import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.entity.Card;
+import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.CardRepository;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -99,5 +105,34 @@ public class CardService {
         }
         
         return true;
+    }
+    
+    /**
+     * Взять карты пользователя по его данным.
+     * @param cardNumber Фильтр номера карты.
+     * @param cardIsBlocked Фильтр с блокировкой карты (искать заблокированную или нет).
+     * @param userLogin Фильтр по логину пользователя.
+     * @param userName Фильтр по имени пользователя.
+     * @param userSurname Фильтр по фамилии пользователя.
+     * @param userPatronymic фильтр по отчеству пользователя.
+     * @param pageable
+     * @return 
+     */
+    public List<CardDto> getCardsByUserData(
+            String cardNumber,
+            Boolean cardIsBlocked,
+            String userLogin,
+            String userName,
+            String userSurname,
+            String userPatronymic,
+            Pageable pageable
+    )
+    {
+        Page<Card> cards = cardRepository.getCardByUserData(cardNumber, cardIsBlocked, userLogin, userName, userSurname, userPatronymic, pageable);
+        
+        return cards.stream().map((card) -> {
+            return new CardDto(card);
+        })
+        .collect(Collectors.toList());
     }
 }

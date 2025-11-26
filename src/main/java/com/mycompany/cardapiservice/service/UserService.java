@@ -93,41 +93,51 @@ public class UserService {
     }
     
     /**
-     * Обновить пользователя целиком (заменить обьект целиком - для put запроса).
+     * Обновить пользователя (заменить данные обьекта, или его целиком - в зависимости от isSaveByPart).
      * @param idUserForUpdate Id пользователя для обновления.
      * @param refreshedUser Обьект пользователя доля обновления.
+     * @param isSaveByPart 
+     * true - обновить конкретное поле/поля в данном обьекте (не целый обьект - для PATCH);
+     * false - обновить обьект целиком (для PUT).
      * @return Статус выполнения.
      */
-    public ResponseEntity<?> refreshFullUser(Long idUserForUpdate, UserDto refreshedUser)
+    public ResponseEntity<?> refreshUser(Long idUserForUpdate, UserDto refreshedUser, boolean isSaveByPart)
     {
-        User user = userRepository.findById(idUserForUpdate).get();
-        
         try {
-            if(refreshedUser.getSurname() != null)
-            {
+            User user = userRepository.findById(idUserForUpdate).get();
+        
+            if (isSaveByPart) {
+                if(refreshedUser.getSurname() != null)
+                {
+                    user.setSurname(refreshedUser.getSurname());
+                }
+
+                if(refreshedUser.getName() != null)
+                {
+                    user.setName(refreshedUser.getName());
+                }
+
+                if(refreshedUser.getPatronymic() != null)
+                {
+                    user.setPatronymic(refreshedUser.getPatronymic());
+                }
+
+                if(refreshedUser.getRole() != null)
+                {
+                    user.setRole(refreshedUser.getRole());
+                }
+
+                if(refreshedUser.getLogin() != null)
+                {
+                    user.setLogin(refreshedUser.getLogin());
+                }
+            } else {
                 user.setSurname(refreshedUser.getSurname());
-            }
-
-            if(refreshedUser.getName() != null)
-            {
                 user.setName(refreshedUser.getName());
-            }
-
-            if(refreshedUser.getPatronymic() != null)
-            {
                 user.setPatronymic(refreshedUser.getPatronymic());
-            }
-
-            if(refreshedUser.getRole() != null)
-            {
                 user.setRole(refreshedUser.getRole());
-            }
-
-            if(refreshedUser.getLogin() != null)
-            {
                 user.setLogin(refreshedUser.getLogin());
             }
-            
             userRepository.save(user);
         } catch (Throwable t)
         {
@@ -138,5 +148,27 @@ public class UserService {
         }
         
         return ResponseEntity.ok("пользователь успешно обновлен!");
+    }
+    
+    /**
+     * Метод для удаления пользователя.
+     * @param userId Id код для удаления пользователя.
+     * @return Статус выполнения.
+     */
+    public ResponseEntity<?> deleteUser(Long userId)
+    {
+        try {
+            User user = userRepository.findById(userId).get();
+
+            userRepository.delete(user);
+            
+            return ResponseEntity.ok("Пользователь был успешно удален!");
+        }
+        catch (Throwable t) {
+            System.err.println("ОШИБКА: UserService.ddeleteUser() - при удалении пользователя: " + t.getMessage());
+            
+            return ResponseEntity.badRequest()
+                    .body("ОШИБКА: UserService.ddeleteUser() - при удалении пользователя: " + t.getMessage());
+        }
     }
 }
