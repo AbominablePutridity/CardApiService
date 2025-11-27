@@ -109,6 +109,32 @@ public class UserController {
         return userService.getAllUsersByFilter(login, surname, name, patronymic, pageable);
     }
     
+    @GetMapping("/admin/getUserByIdOrLogin")
+    @Operation(
+        summary = "Получить конкретного пользователя (по логину или его id)", 
+        description = "Возвращает конкретного пользователя"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public UserDto getUserByIdOrLogin(
+            @Parameter(
+                description = "Id пользователя"
+            )
+            @RequestParam(value = "id", required = false) Long id,
+            
+            @Parameter(
+                description = "Логин пользователя"
+            )
+            @RequestParam(value = "id", required = false) String login
+    )
+    {
+        return userService.getUserByIdOrLogin(id, login);
+    }
+    
     @PutMapping("/admin/refreshFullUser")
     @Operation(
         summary = "Обновить (полностью) данные о конкретном пользователе", 

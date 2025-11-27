@@ -10,8 +10,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -119,5 +122,50 @@ public class CardController {
         Pageable pageable = PageRequest.of(page, size);
         
         return cardService.getCardsByUserData(cardNumber, cardIsBlocked, userLogin, userName, userSurname, userPatronymic, pageable);
+    }
+    
+    
+    @GetMapping("/admin/getUserCard")
+    @Operation(
+        summary = "Получить конкретную карту (по id или номеру карты - для админов)", 
+        description = "Возвращает конкретную карту пользователя"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public CardDto getCardByIdOrNumber(
+            @Parameter(
+                description = "id карты"
+            )
+            @RequestParam(value = "id", required = false) Long id,
+            
+            @Parameter(
+                description = "номер карты"
+            )
+            @RequestParam(value = "id", required = false) String number
+    )
+    {
+        return cardService.getCardByIdOrNumber(id, number);
+    }
+    
+    @PostMapping("/admin/setUserCard")
+    @Operation(
+        summary = "Создать карту пользователю", 
+        description = "Возвращает статус выполнения"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public ResponseEntity<?> setCardForUser(
+            @RequestBody CardDto cardDto
+    )
+    {
+        return cardService.setCardForUser(cardDto);
     }
 }

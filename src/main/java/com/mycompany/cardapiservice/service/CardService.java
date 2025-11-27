@@ -9,6 +9,7 @@ import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.entity.Card;
 import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.CardRepository;
+import com.mycompany.cardapiservice.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,10 +28,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Service
 public class CardService {
     private final CardRepository cardRepository;
+    private UserService userService;
+    private StatusCardService statusCardService;
+    private CurrencyService currencyService;
     
-    public CardService(CardRepository cardRepository)
+    public CardService(
+            CardRepository cardRepository,
+            UserService userService,
+            StatusCardService statusCardService,
+            CurrencyService currencyService
+    )
     {
         this.cardRepository = cardRepository;
+        this.userService = userService;
+        this.statusCardService = statusCardService;
+        this.currencyService = currencyService;
     }
     
     public List<CardDto> prepareUserCards(String userLogin, Pageable pageable)
@@ -134,5 +147,66 @@ public class CardService {
             return new CardDto(card);
         })
         .collect(Collectors.toList());
+    }
+    
+    /**
+     * Взять обьект карты по ее id.
+     * @param id Id-код карты.
+     * @return Обьект карты.
+     */
+    public Card getCardById(Long id)
+    {
+        return cardRepository.findById(id).get();
+    }
+    
+    /**
+     * Взять обьект карты по ее id или номеру карты.
+     * @param id Id-код карты.
+     * @param number Номер карты.
+     * @return Обьект карты.
+     */
+    public CardDto getCardByIdOrNumber(Long id, String number)
+    {
+        Card card = null;
+        
+        if (id != null && number == null)
+        {
+            card = getCardById(id);
+        }
+        
+        if (number != null && id == null) {
+            card = cardRepository.getCardByNumber(number).get();
+        }
+        
+        return new CardDto(card);
+    }
+    
+    /**
+     * Создание карты для пользователя.
+     * @param cardDto Данные создаваемой карты.
+     * @return Статус выполнения.
+     */
+    public ResponseEntity<?> setCardForUser(CardDto cardDto)
+    {
+        try {
+            Card newCard = new Card();
+            newCard.setNumber(cardDto.getNumber());
+            newCard.setUser(userService.getUserById(cardDto.getUserDto().getId()));
+            newCard.setValidityPeriod(cardDto.getValidityPeriod());
+            newCard.setStatusCard(statusCardService.getStatusCardById(cardDto.getStatusCardDto().getId()));
+            newCard.setBalance(cardDto.getBalance());
+            newCard.setCurrency(currencyService.getCurrencyById(cardDto.getCurrencyDto().getId()));
+            newCard.setIsBlocked(cardDto.getIsBlocked());
+            
+            cardRepository.save(newCard);
+            
+            return ResponseEntity.ok("Обьект карты успешно сохранен пользователю!");
+        } catch (Throwable t)
+        {
+            System.err.println("ОШИБКА: CardService.setCardForUser() - не удалось сохранить обьект новой карты: " + t.getMessage());
+            
+            return ResponseEntity.badRequest()
+                    .body("не удалось сохранить обьект новой карты!");
+        }
     }
 }

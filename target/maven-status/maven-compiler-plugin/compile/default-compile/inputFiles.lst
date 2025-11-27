@@ -24,7 +24,9 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\enums\Role.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\CardRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\CardTransferRepository.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\CurrencyRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\OperationRepository.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\StatusCardRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\TaskRequestRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\TaskStatusRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\UserRepository.java
@@ -32,5 +34,7 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\security\TockenSecurity.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CardService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CardTransferService.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CurrencyService.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\StatusCardService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\TaskRequestService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\UserService.java

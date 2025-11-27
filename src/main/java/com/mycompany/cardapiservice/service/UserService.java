@@ -171,4 +171,35 @@ public class UserService {
                     .body("ОШИБКА: UserService.ddeleteUser() - при удалении пользователя: " + t.getMessage());
         }
     }
+    
+    /**
+     * Взять пользователя по его id. (для того чтобы брать обьекты по id в post-запросах)
+     * @param id Id получаемого пользователя.
+     * @return Обьект пользователя
+     */
+    public User getUserById(Long id)
+    {
+        return userRepository.findById(id).get();
+    }
+    
+    /**
+     * Взять пользователя по логину или его id.
+     * @param id Id пользователя.
+     * @param login Логин пользователя.
+     * @return Обьект пользователя.
+     */
+    public UserDto getUserByIdOrLogin(Long id, String login)
+    {
+        User user = null;
+        
+        if (id != null && login == null) {
+            user = getUserById(id);
+        }
+        
+        if (login != null && id == null) {
+            user = userRepository.findByLogin(login).get();
+        }
+        
+        return new UserDto(user);
+    }
 }
