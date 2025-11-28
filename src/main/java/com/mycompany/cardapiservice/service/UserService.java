@@ -96,7 +96,7 @@ public class UserService {
      * Обновить пользователя (заменить данные обьекта, или его целиком - в зависимости от isSaveByPart).
      * @param idUserForUpdate Id пользователя для обновления.
      * @param refreshedUser Обьект пользователя доля обновления.
-     * @param isSaveByPart 
+     * @param isSaveByPart
      * true - обновить конкретное поле/поля в данном обьекте (не целый обьект - для PATCH);
      * false - обновить обьект целиком (для PUT).
      * @return Статус выполнения.

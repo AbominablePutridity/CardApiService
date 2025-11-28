@@ -137,8 +137,8 @@ public class UserController {
     
     @PutMapping("/admin/refreshFullUser")
     @Operation(
-        summary = "Обновить (полностью) данные о конкретном пользователе", 
-        description = "Возвращает список всех карт пользователя"
+        summary = "Обновить (полностью) данные о конкретном пользователе (для админов)", 
+        description = "Возвращает статус выполнения"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
             in = ParameterIn.HEADER,
@@ -171,8 +171,8 @@ public class UserController {
     
     @PatchMapping("/admin/refreshPartUser")
     @Operation(
-        summary = "Обновить (частично) данные о конкретном пользователе", 
-        description = "Возвращает список всех карт пользователя"
+        summary = "Обновить (частично) данные о конкретном пользователе (для админов)", 
+        description = "Возвращает статус выполнения"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
             in = ParameterIn.HEADER,
@@ -197,8 +197,8 @@ public class UserController {
     
     @DeleteMapping("/admin/deleteUser")
     @Operation(
-        summary = "Удалить конкретного пользователя по его Id", 
-        description = "Возвращает список всех карт пользователя"
+        summary = "Удалить конкретного пользователя по его Id (для админов)", 
+        description = "Возвращает статус выполнения"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
             in = ParameterIn.HEADER,

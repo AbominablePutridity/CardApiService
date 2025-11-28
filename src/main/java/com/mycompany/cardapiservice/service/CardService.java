@@ -209,4 +209,68 @@ public class CardService {
                     .body("не удалось сохранить обьект новой карты!");
         }
     }
+    
+     /**
+     * Обновление обьекта карты пользователя по его id (для PUT и PATCH запросов).
+     * @param idCardForUpdate
+     * @param refreshedCard Обьект карты с данными для обновления.
+     * @param isSaveByPart
+     * true - обновить конкретное поле/поля в данном обьекте (не целый обьект - для PATCH);
+     * false - обновить обьект целиком (для PUT).
+     * @return Статус выполнения.
+     */
+    public ResponseEntity<?> updateUserCard(Long idCardForUpdate, CardDto refreshedCard, boolean isSaveByPart)
+    {
+        try {
+            Card card = cardRepository.findById(idCardForUpdate).get();
+        
+            if (isSaveByPart) {
+                if(refreshedCard.getNumber()!= null)
+                {
+                    card.setNumber(refreshedCard.getNumber());
+                }
+                
+                if(refreshedCard.getUserDto()!= null)
+                {
+                    card.setUser(userService.getUserById(refreshedCard.getUserDto().getId()));
+                }
+                
+                if(refreshedCard.getValidityPeriod()!= null)
+                {
+                    card.setValidityPeriod(refreshedCard.getValidityPeriod());
+                }
+
+                if(refreshedCard.getStatusCardDto() != null)
+                {
+                    card.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
+                }
+
+                if(refreshedCard.getBalance()!= null)
+                {
+                    card.setBalance(refreshedCard.getBalance());
+                }
+                
+                if(refreshedCard.getCurrencyDto() != null)
+                {
+                    card.setCurrency(currencyService.getCurrencyById(refreshedCard.getCurrencyDto().getId()));
+                }
+            } else {
+                card.setNumber(refreshedCard.getNumber());
+                card.setUser(userService.getUserById(refreshedCard.getUserDto().getId()));
+                card.setValidityPeriod(refreshedCard.getValidityPeriod());
+                card.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
+                card.setBalance(refreshedCard.getBalance());
+                card.setCurrency(currencyService.getCurrencyById(refreshedCard.getCurrencyDto().getId()));
+            }
+            cardRepository.save(card);
+        } catch (Throwable t)
+        {
+            System.err.println("ОШИБКА: CardService.updateUserCard() проверка полей вызвало исключение: " + t.getMessage());
+            
+            return ResponseEntity.badRequest()
+               .body("Ошибка при обновлении пользователя: " + t.getMessage());
+        }
+        
+        return ResponseEntity.ok("пользователь успешно обновлен!");
+    }
 }
