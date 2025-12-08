@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,7 @@ public class CurrencyController {
         return new CurrencyDto(currencyService.getObjectById(id));
     }
     
-    @PatchMapping("/user/deleteCurrency")
+    @DeleteMapping("/user/deleteCurrency")
     @Operation(
         summary = "Удалить данные о конкретной валюте", 
         description = "Возвращает статус выполнения"
