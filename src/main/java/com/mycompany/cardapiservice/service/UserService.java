@@ -2,6 +2,7 @@ package com.mycompany.cardapiservice.service;
 
 import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.dto.auth.AuthorizationDto;
+import com.mycompany.cardapiservice.entity.Currency;
 import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.UserRepository;
 import com.mycompany.cardapiservice.security.TockenSecurity;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,17 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class UserService {
+public class UserService extends UniversalEndpointsService<User, UserDto, User, Long, JpaRepository<User, Long>>{
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder)
+    public UserService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    )
     {
+        super(userRepository); //передаем репозиторий в абстрактный класс, от которого унаследуемся здесь
+        
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -151,38 +158,6 @@ public class UserService {
     }
     
     /**
-     * Метод для удаления пользователя.
-     * @param userId Id код для удаления пользователя.
-     * @return Статус выполнения.
-     */
-    public ResponseEntity<?> deleteUser(Long userId)
-    {
-        try {
-            User user = userRepository.findById(userId).get();
-
-            userRepository.delete(user);
-            
-            return ResponseEntity.ok("Пользователь был успешно удален!");
-        }
-        catch (Throwable t) {
-            System.err.println("ОШИБКА: UserService.ddeleteUser() - при удалении пользователя: " + t.getMessage());
-            
-            return ResponseEntity.badRequest()
-                    .body("ОШИБКА: UserService.ddeleteUser() - при удалении пользователя: " + t.getMessage());
-        }
-    }
-    
-    /**
-     * Взять пользователя по его id. (для того чтобы брать обьекты по id в post-запросах)
-     * @param id Id получаемого пользователя.
-     * @return Обьект пользователя
-     */
-    public User getUserById(Long id)
-    {
-        return userRepository.findById(id).get();
-    }
-    
-    /**
      * Взять пользователя по логину или его id.
      * @param id Id пользователя.
      * @param login Логин пользователя.
@@ -193,7 +168,7 @@ public class UserService {
         User user = null;
         
         if (id != null && login == null) {
-            user = getUserById(id);
+            user = getObjectById(id);
         }
         
         if (login != null && id == null) {
@@ -201,5 +176,10 @@ public class UserService {
         }
         
         return new UserDto(user);
+    }
+
+    @Override
+    protected UserDto toDto(User obj) {
+        return new UserDto(obj); //конкретная реализация
     }
 }

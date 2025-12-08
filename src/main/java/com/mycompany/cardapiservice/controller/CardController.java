@@ -294,4 +294,25 @@ public class CardController {
     {
         return cardService.updateUserCard(id, cardDto, true);
     }
+    
+    @PatchMapping("/admin/deleteCard")
+    @Operation(
+        summary = "Удалить данные о конкретной карте (для админов)", 
+        description = "Возвращает статус выполнения"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public ResponseEntity<?> deleteCard(
+        @Parameter(
+            description = "Id пользователя для обновления"
+        )
+        @RequestParam(value = "id", required = true) Long id
+    )
+    {
+        return cardService.deleteObject(id);
+    }
 }

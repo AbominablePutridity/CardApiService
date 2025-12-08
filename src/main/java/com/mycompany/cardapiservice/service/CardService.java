@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.cardapiservice.service;
 
 import com.mycompany.cardapiservice.dto.CardDto;
@@ -17,16 +13,16 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
- * @author User
  */
 @Service
-public class CardService {
+public class CardService extends UniversalEndpointsService<Card, CardDto, Card, Long, JpaRepository<Card, Long>> {
     private final CardRepository cardRepository;
     private UserService userService;
     private StatusCardService statusCardService;
@@ -39,12 +35,20 @@ public class CardService {
             CurrencyService currencyService
     )
     {
+        super(cardRepository); //передаем репозиторий в абстрактный класс, от которого унаследуемся здесь
+        
         this.cardRepository = cardRepository;
         this.userService = userService;
         this.statusCardService = statusCardService;
         this.currencyService = currencyService;
     }
     
+    /**
+     * Взять список карт по фильтрам.
+     * @param userLogin Фильтр по логину пользователя.
+     * @param pageable Фильтр по пагинации.
+     * @return 
+     */
     public List<CardDto> prepareUserCards(String userLogin, Pageable pageable)
     {
         List<Card> page = cardRepository.getCardsByUserLogin(userLogin, pageable).getContent();
@@ -191,11 +195,11 @@ public class CardService {
         try {
             Card newCard = new Card();
             newCard.setNumber(cardDto.getNumber());
-            newCard.setUser(userService.getUserById(cardDto.getUserDto().getId()));
+            newCard.setUser(userService.getObjectById(cardDto.getUserDto().getId()));
             newCard.setValidityPeriod(cardDto.getValidityPeriod());
             newCard.setStatusCard(statusCardService.getStatusCardById(cardDto.getStatusCardDto().getId()));
             newCard.setBalance(cardDto.getBalance());
-            newCard.setCurrency(currencyService.getCurrencyById(cardDto.getCurrencyDto().getId()));
+            newCard.setCurrency(currencyService.getObjectById(cardDto.getCurrencyDto().getId()));
             newCard.setIsBlocked(cardDto.getIsBlocked());
             
             cardRepository.save(newCard);
@@ -232,7 +236,7 @@ public class CardService {
                 
                 if(refreshedCard.getUserDto()!= null)
                 {
-                    card.setUser(userService.getUserById(refreshedCard.getUserDto().getId()));
+                    card.setUser(userService.getObjectById(refreshedCard.getUserDto().getId()));
                 }
                 
                 if(refreshedCard.getValidityPeriod()!= null)
@@ -252,15 +256,15 @@ public class CardService {
                 
                 if(refreshedCard.getCurrencyDto() != null)
                 {
-                    card.setCurrency(currencyService.getCurrencyById(refreshedCard.getCurrencyDto().getId()));
+                    card.setCurrency(currencyService.getObjectById(refreshedCard.getCurrencyDto().getId()));
                 }
             } else {
                 card.setNumber(refreshedCard.getNumber());
-                card.setUser(userService.getUserById(refreshedCard.getUserDto().getId()));
+                card.setUser(userService.getObjectById(refreshedCard.getUserDto().getId()));
                 card.setValidityPeriod(refreshedCard.getValidityPeriod());
                 card.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
                 card.setBalance(refreshedCard.getBalance());
-                card.setCurrency(currencyService.getCurrencyById(refreshedCard.getCurrencyDto().getId()));
+                card.setCurrency(currencyService.getObjectById(refreshedCard.getCurrencyDto().getId()));
             }
             cardRepository.save(card);
         } catch (Throwable t)
@@ -272,5 +276,10 @@ public class CardService {
         }
         
         return ResponseEntity.ok("пользователь успешно обновлен!");
+    }
+
+    @Override
+    protected CardDto toDto(Card obj) {
+        return new CardDto(obj); //конкретная реализация из абстрактного класса.
     }
 }

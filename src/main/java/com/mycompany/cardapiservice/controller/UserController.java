@@ -213,6 +213,6 @@ public class UserController {
             @RequestParam(value = "id", required = true) Long idUserForDelete
     )
     {
-        return userService.deleteUser(idUserForDelete);
+        return userService.deleteObject(idUserForDelete);
     }
 }

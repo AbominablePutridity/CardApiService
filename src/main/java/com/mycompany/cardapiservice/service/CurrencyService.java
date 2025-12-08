@@ -1,28 +1,22 @@
 package com.mycompany.cardapiservice.service;
 
+import com.mycompany.cardapiservice.dto.CurrencyDto;
 import com.mycompany.cardapiservice.entity.Currency;
-import com.mycompany.cardapiservice.repository.CurrencyRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 /**
  *
  */
 @Service
-public class CurrencyService {
-    private CurrencyRepository currencyRepository;
-    
-    public CurrencyService(CurrencyRepository currencyRepository)
-    {
-        this.currencyRepository = currencyRepository;
+public class CurrencyService extends UniversalEndpointsService<Currency, CurrencyDto, Currency, Long, JpaRepository<Currency, Long>>{
+
+    public CurrencyService(JpaRepository<Currency, Long> repository) {
+        super(repository);
     }
-    
-    /**
-     * Взять валюту по ее id.
-     * @param id Id валюты.
-     * @return Обьект валюты.
-     */
-    public Currency getCurrencyById(Long id)
-    {
-        return currencyRepository.findById(id).get();
+
+    @Override
+    protected CurrencyDto toDto(Currency obj) {
+        return new CurrencyDto(obj);  //конкретная реализация
     }
 }
