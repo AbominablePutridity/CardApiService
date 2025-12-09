@@ -148,7 +148,7 @@ public class UserService extends UniversalEndpointsService<User, UserDto, User, 
             userRepository.save(user);
         } catch (Throwable t)
         {
-            System.err.println("ОШИБКА: UserService.refreshFullUser() проверка полей вызвало исключение: " + t.getMessage());
+            System.err.println("ОШИБКА: UserService.refreshUser() проверка полей вызвало исключение: " + t.getMessage());
             
             return ResponseEntity.badRequest()
                .body("Ошибка при обновлении пользователя: " + t.getMessage());
