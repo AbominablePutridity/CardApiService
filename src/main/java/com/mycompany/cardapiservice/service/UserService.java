@@ -1,7 +1,9 @@
 package com.mycompany.cardapiservice.service;
 
+import com.mycompany.cardapiservice.dto.CardDto;
 import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.dto.auth.AuthorizationDto;
+import com.mycompany.cardapiservice.entity.Card;
 import com.mycompany.cardapiservice.entity.Currency;
 import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.UserRepository;
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class UserService extends UniversalEndpointsService<User, UserDto, User, Long, JpaRepository<User, Long>>{
+public class UserService extends ExtendedUniversalWriteEndpointsService<User, UserDto, User, Long, JpaRepository<User, Long>>{
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     
@@ -113,39 +115,10 @@ public class UserService extends UniversalEndpointsService<User, UserDto, User, 
         try {
             User user = userRepository.findById(idUserForUpdate).get();
         
-            if (isSaveByPart) {
-                if(refreshedUser.getSurname() != null)
-                {
-                    user.setSurname(refreshedUser.getSurname());
-                }
-
-                if(refreshedUser.getName() != null)
-                {
-                    user.setName(refreshedUser.getName());
-                }
-
-                if(refreshedUser.getPatronymic() != null)
-                {
-                    user.setPatronymic(refreshedUser.getPatronymic());
-                }
-
-                if(refreshedUser.getRole() != null)
-                {
-                    user.setRole(refreshedUser.getRole());
-                }
-
-                if(refreshedUser.getLogin() != null)
-                {
-                    user.setLogin(refreshedUser.getLogin());
-                }
-            } else {
-                user.setSurname(refreshedUser.getSurname());
-                user.setName(refreshedUser.getName());
-                user.setPatronymic(refreshedUser.getPatronymic());
-                user.setRole(refreshedUser.getRole());
-                user.setLogin(refreshedUser.getLogin());
-            }
-            userRepository.save(user);
+            //обновляем все поля кроме ключей и возвращаем обьект с данными
+            User updatedUserObject = refreshedUser.toEntityWithFieldsCondition(user, isSaveByPart);
+            
+            userRepository.save(updatedUserObject);
         } catch (Throwable t)
         {
             System.err.println("ОШИБКА: UserService.refreshUser() проверка полей вызвало исключение: " + t.getMessage());

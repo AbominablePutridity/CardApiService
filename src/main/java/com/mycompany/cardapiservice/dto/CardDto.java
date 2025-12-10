@@ -1,12 +1,13 @@
 package com.mycompany.cardapiservice.dto;
 
+import com.mycompany.cardapiservice.dto.interfaces.TransferableDtoToEntity;
 import com.mycompany.cardapiservice.entity.Card;
 import java.time.LocalDate;
 
 /**
  *
  */
-public class CardDto {
+public class CardDto implements TransferableDtoToEntity<Card> {
     private Long id;
     private String number;
     private LocalDate validityPeriod;
@@ -92,5 +93,65 @@ public class CardDto {
 
     public void setIsBlocked(boolean isBlocked) {
         this.isBlocked = isBlocked;
+    }
+
+    /**
+     * Перевод DTO класса в сущность
+     * тут добавляем аттрибуты без ключей - ключи добавляем в сервисах.
+     * (для унификации POST запроса, конкретная реализация перевода в сущность)
+     * @return Обьект новой сущности (для сохранения в бд)
+     */
+    @Override
+    public Card toEntity() {
+        Card card = new Card();
+        
+        return setDataInObject(card);
+    }
+    
+    /**
+     * Выношу логику в отдельный полноценный метод для того чтобы не было повторений кода
+     * @param cardObject Обьект сущности, в который сохраняем данные из этого DTO класса
+     * @return Обьект сущности с данными
+     */
+    private Card setDataInObject(Card cardObject) {
+        cardObject.setNumber(number);
+        cardObject.setValidityPeriod(validityPeriod);
+        cardObject.setBalance(balance);
+        cardObject.setIsBlocked(isBlocked);
+        
+        return cardObject;
+    }
+    
+    /**
+     * Метод для обновления полей сущности из DTO класса
+     * (обновление полей без ключей, ключи обновляются в сервисах)
+     * @param cardForUpdate Обьект сущности, которую нужно обновить
+     * @param isSaveByPart
+     * @return 
+     */
+    @Override
+    public Card toEntityWithFieldsCondition(Card cardForUpdate, Boolean isSaveByPart) {
+        if (isSaveByPart) {
+            if(number != null)
+            {
+                cardForUpdate.setNumber(number);
+            }
+            
+            if(validityPeriod!= null)
+            {
+                cardForUpdate.setValidityPeriod(validityPeriod);
+            }
+            
+            if(balance != null)
+            {
+                cardForUpdate.setBalance(balance);
+            }
+            
+            cardForUpdate.setIsBlocked(isBlocked);
+        } else {           
+            cardForUpdate = setDataInObject(cardForUpdate);
+        }
+        
+        return cardForUpdate;
     }
 }

@@ -1,6 +1,7 @@
 package com.mycompany.cardapiservice.service;
 
 import com.mycompany.cardapiservice.dto.CurrencyDto;
+import com.mycompany.cardapiservice.dto.interfaces.TransferableDtoToEntity;
 import com.mycompany.cardapiservice.entity.Currency;
 import com.mycompany.cardapiservice.repository.CurrencyRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class CurrencyService extends UniversalEndpointsService<Currency, CurrencyDto, Currency, Long, JpaRepository<Currency, Long>>{
+public class CurrencyService extends ExtendedUniversalWriteEndpointsService<Currency, CurrencyDto, Currency, Long, JpaRepository<Currency, Long>>{
     private CurrencyRepository currencyRepository;
     
     public CurrencyService(
@@ -22,28 +23,6 @@ public class CurrencyService extends UniversalEndpointsService<Currency, Currenc
         super(repository);
         
         this.currencyRepository = currencyRepository;
-    }
-    
-    /**
-     * Сохранить обьект валюты в БД.
-     * @param newCurrency Обьект валюты для сохранения.
-     * @return Статус выполнения.
-     */
-    public ResponseEntity<?> setCurrency(CurrencyDto newCurrency)
-    {
-        try {
-        Currency currency = new Currency();
-        currency.setName(newCurrency.getName());
-        currency.setSign(newCurrency.getSign());
-        
-        currencyRepository.save(currency);
-        } catch(Throwable t) {
-            System.err.println("ОШИБКА: Cyrrency.setCurrency(), при сохранении сущности обьекта в бд - " + t.getMessage());
-            
-            return ResponseEntity.badRequest().body(t.getMessage());
-        }
-        
-        return ResponseEntity.ok().body("Новая валюта была успешно сохранена!");
     }
     
      /**
@@ -60,21 +39,10 @@ public class CurrencyService extends UniversalEndpointsService<Currency, Currenc
         try {
             Currency currency = currencyRepository.findById(idCurrencyForUpdate).get();
         
-            if (isSaveByPart) {
-                if(refreshedCurrency.getName()!= null)
-                {
-                    currency.setName(refreshedCurrency.getName());
-                }
-
-                if(refreshedCurrency.getSign()!= null)
-                {
-                    currency.setSign(refreshedCurrency.getSign());
-                }
-            } else {
-                currency.setName(refreshedCurrency.getName());
-                currency.setSign(refreshedCurrency.getSign());
-            }
-            currencyRepository.save(currency);
+            //обновляем все поля кроме ключей и возвращаем обьект с данными
+            Currency updatedCurrencyObject = refreshedCurrency.toEntityWithFieldsCondition(currency, isSaveByPart);
+            
+            currencyRepository.save(updatedCurrencyObject);
         } catch (Throwable t)
         {
             System.err.println("ОШИБКА: CurrencyService.refreshCurrency() проверка полей вызвало исключение: " + t.getMessage());

@@ -7,12 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 
 /**
- * Абстрактный класс с общей логикой на стандартные запросы.
+ * Абстрактный класс с общей логикой на стандартные запросы c чтением данных из бд и удалением.
  */
-public abstract class UniversalEndpointsService<OBJ, RET, INP, ID, R extends JpaRepository<OBJ, ID>> {
+public abstract class BasedUniversalEndpointsService<OBJ, RET, INP, ID, R extends JpaRepository<OBJ, ID>> {
     protected R repository;
     
-    public UniversalEndpointsService(R repository)
+    public BasedUniversalEndpointsService(R repository)
     {
         this.repository = repository;
     }
@@ -53,7 +53,7 @@ public abstract class UniversalEndpointsService<OBJ, RET, INP, ID, R extends Jpa
 
             repository.delete(obj);
             
-            return ResponseEntity.ok("Пользователь был успешно удален!");
+            return ResponseEntity.ok("Запись была успешно удалена!");
         }
         catch (Throwable t) {
             System.err.println("ОШИБКА: UserService.deleteUser() - при удалении пользователя: " + t.getMessage());

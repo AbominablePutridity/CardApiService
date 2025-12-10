@@ -1,7 +1,6 @@
 package com.mycompany.cardapiservice.controller;
 
 import com.mycompany.cardapiservice.dto.CurrencyDto;
-import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.service.CurrencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -104,7 +103,7 @@ public class CurrencyController {
             @RequestBody CurrencyDto newCurrency
     )
     {
-        return currencyService.setCurrency(newCurrency);
+        return currencyService.setObject(newCurrency);//setCurrency(newCurrency);
     }
     
     @PutMapping("/admin/refreshFulCurrency")

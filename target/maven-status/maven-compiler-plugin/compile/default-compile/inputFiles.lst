@@ -10,6 +10,7 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\CardDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\CardTransferDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\CurrencyDto.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\interfaces\TransferableDtoToEntity.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\OperationDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\StatusCardDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\TaskRequestDto.java
@@ -34,11 +35,12 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\repository\UserRepository.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\security\JwtAuthenticationFilter.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\security\TockenSecurity.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\BasedUniversalEndpointsService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CardService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CardTransferService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\CurrencyService.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\ExtendedUniversalWriteEndpointsService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\OperationService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\StatusCardService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\TaskRequestService.java
-C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\UniversalEndpointsService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\UserService.java

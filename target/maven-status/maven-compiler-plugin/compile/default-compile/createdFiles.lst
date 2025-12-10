@@ -23,7 +23,6 @@ com\mycompany\cardapiservice\dto\auth\AuthorizationDto.class
 com\mycompany\cardapiservice\security\TockenSecurity.class
 com\mycompany\cardapiservice\entity\StatusCard.class
 com\mycompany\cardapiservice\repository\CurrencyRepository.class
-com\mycompany\cardapiservice\service\UniversalEndpointsService.class
 com\mycompany\cardapiservice\repository\UserRepository.class
 com\mycompany\cardapiservice\entity\CardTransfer.class
 com\mycompany\cardapiservice\entity\User.class
@@ -34,11 +33,14 @@ com\mycompany\cardapiservice\dto\CurrencyDto.class
 com\mycompany\cardapiservice\entity\TaskStatus.class
 com\mycompany\cardapiservice\repository\OperationRepository.class
 com\mycompany\cardapiservice\service\StatusCardService.class
+com\mycompany\cardapiservice\service\ExtendedUniversalWriteEndpointsService.class
 com\mycompany\cardapiservice\repository\TaskStatusRepository.class
 com\mycompany\cardapiservice\entity\Operation.class
 com\mycompany\cardapiservice\repository\StatusCardRepository.class
 com\mycompany\cardapiservice\repository\CardRepository.class
 com\mycompany\cardapiservice\service\CurrencyService.class
 com\mycompany\cardapiservice\service\UserService.class
+com\mycompany\cardapiservice\dto\interfaces\TransferableDtoToEntity.class
+com\mycompany\cardapiservice\service\BasedUniversalEndpointsService.class
 com\mycompany\cardapiservice\dto\StatusCardDto.class
 com\mycompany\cardapiservice\service\CardTransferService.class

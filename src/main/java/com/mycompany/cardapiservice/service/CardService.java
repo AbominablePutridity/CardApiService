@@ -6,23 +6,20 @@ import com.mycompany.cardapiservice.entity.Card;
 import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.CardRepository;
 import com.mycompany.cardapiservice.repository.UserRepository;
-import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
  */
 @Service
-public class CardService extends UniversalEndpointsService<Card, CardDto, Card, Long, JpaRepository<Card, Long>> {
+public class CardService extends ExtendedUniversalWriteEndpointsService<Card, CardDto, Card, Long, JpaRepository<Card, Long>> {
     private final CardRepository cardRepository;
     private UserService userService;
     private StatusCardService statusCardService;
@@ -193,14 +190,10 @@ public class CardService extends UniversalEndpointsService<Card, CardDto, Card, 
     public ResponseEntity<?> setCardForUser(CardDto cardDto)
     {
         try {
-            Card newCard = new Card();
-            newCard.setNumber(cardDto.getNumber());
+            Card newCard = cardDto.toEntity();
             newCard.setUser(userService.getObjectById(cardDto.getUserDto().getId()));
-            newCard.setValidityPeriod(cardDto.getValidityPeriod());
             newCard.setStatusCard(statusCardService.getStatusCardById(cardDto.getStatusCardDto().getId()));
-            newCard.setBalance(cardDto.getBalance());
             newCard.setCurrency(currencyService.getObjectById(cardDto.getCurrencyDto().getId()));
-            newCard.setIsBlocked(cardDto.getIsBlocked());
             
             cardRepository.save(newCard);
             
@@ -228,43 +221,28 @@ public class CardService extends UniversalEndpointsService<Card, CardDto, Card, 
         try {
             Card card = cardRepository.findById(idCardForUpdate).get();
         
-            if (isSaveByPart) {
-                if(refreshedCard.getNumber()!= null)
-                {
-                    card.setNumber(refreshedCard.getNumber());
-                }
-                
+            //обновляем все поля кроме ключей и возвращаем обьект с данными
+            Card updatedCardObject = refreshedCard.toEntityWithFieldsCondition(card, isSaveByPart);
+            
+            if (isSaveByPart) { 
                 if(refreshedCard.getUserDto()!= null)
                 {
-                    card.setUser(userService.getObjectById(refreshedCard.getUserDto().getId()));
-                }
-                
-                if(refreshedCard.getValidityPeriod()!= null)
-                {
-                    card.setValidityPeriod(refreshedCard.getValidityPeriod());
+                    updatedCardObject.setUser(userService.getObjectById(refreshedCard.getUserDto().getId()));
                 }
 
                 if(refreshedCard.getStatusCardDto() != null)
                 {
-                    card.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
-                }
-
-                if(refreshedCard.getBalance()!= null)
-                {
-                    card.setBalance(refreshedCard.getBalance());
+                    updatedCardObject.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
                 }
                 
                 if(refreshedCard.getCurrencyDto() != null)
                 {
-                    card.setCurrency(currencyService.getObjectById(refreshedCard.getCurrencyDto().getId()));
+                    updatedCardObject.setCurrency(currencyService.getObjectById(refreshedCard.getCurrencyDto().getId()));
                 }
             } else {
-                card.setNumber(refreshedCard.getNumber());
-                card.setUser(userService.getObjectById(refreshedCard.getUserDto().getId()));
-                card.setValidityPeriod(refreshedCard.getValidityPeriod());
-                card.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
-                card.setBalance(refreshedCard.getBalance());
-                card.setCurrency(currencyService.getObjectById(refreshedCard.getCurrencyDto().getId()));
+                updatedCardObject.setUser(userService.getObjectById(refreshedCard.getUserDto().getId()));
+                updatedCardObject.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
+                updatedCardObject.setCurrency(currencyService.getObjectById(refreshedCard.getCurrencyDto().getId()));
             }
             cardRepository.save(card);
         } catch (Throwable t)
