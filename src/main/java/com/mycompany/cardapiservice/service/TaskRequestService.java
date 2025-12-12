@@ -15,17 +15,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskRequestService {
     private TaskRequestRepository taskRequestRepository;
-    private OperationRepository operationRepository;
+    private OperationService operationService;
     private TaskStatusRepository taskStatusRepository;
     
     public TaskRequestService(
             TaskRequestRepository taskRequestRepository,
-            OperationRepository operationRepository,
+            OperationService operationService,
             TaskStatusRepository taskStatusRepository
     )
     {
         this.taskRequestRepository = taskRequestRepository;
-        this.operationRepository = operationRepository;
+        this.operationService = operationService;
         this.taskStatusRepository = taskStatusRepository;
     }
     
@@ -36,7 +36,7 @@ public class TaskRequestService {
         newTaskRequest.setDescription(taskRequestDto.getDescription());
         newTaskRequest.setUser(currentUser);
         newTaskRequest.setOperation(
-                operationRepository.getOperationById(taskRequestDto.getOperationDto().getId())
+                operationService.getObjectById(taskRequestDto.getOperationDto().getId())
         );
         newTaskRequest.setTaskStatus(
                 taskStatusRepository.getTaskStatusById(taskRequestDto.getTaskStatusDto().getId())

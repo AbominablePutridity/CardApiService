@@ -6,6 +6,11 @@ import org.springframework.http.ResponseEntity;
 
 /**
  *Абстрактный класс с общей логикой на стандартные запросы c сохранением данных в бд.
+ * @param <OBJ> Класс для типа обьекта сущности.
+ * @param <RET> Класс для типа обьекта возвращаемого значения.
+ * @param <INP> Класс для типа обьекта передачи в метод.
+ * @param <ID> Класс для типа первичного идентификатора (id) в сущностях.
+ * @param <R> Класс для типа репозитория сущности.
  */
 public abstract class ExtendedUniversalWriteEndpointsService<
     OBJ, 

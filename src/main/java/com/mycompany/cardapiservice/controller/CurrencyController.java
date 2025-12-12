@@ -34,7 +34,7 @@ public class CurrencyController {
         this.currencyService = currencyService;
     }
     
-    @GetMapping("/user/getAllCurrency")
+    @GetMapping("/admin/getAllCurrency")
     @Operation(
         summary = "Получить список валют по пагинации", 
         description = "Возвращает список валют"
@@ -64,7 +64,7 @@ public class CurrencyController {
         return currencyService.prepareObjects(pageable);
     }
     
-    @GetMapping("/user/getCurrencyById")
+    @GetMapping("/admin/getCurrencyById")
     @Operation(
         summary = "Получить конкретную валюту по id", 
         description = "Возвращает конкретную валюту"
@@ -87,7 +87,7 @@ public class CurrencyController {
     
     @PostMapping("/admin/setCurrency")
     @Operation(
-        summary = "Получить конкретную валюту по id", 
+        summary = "Сохранить конкретную валюту по id", 
         description = "Возвращает конкретную валюту"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
@@ -103,11 +103,11 @@ public class CurrencyController {
             @RequestBody CurrencyDto newCurrency
     )
     {
-        return currencyService.setObject(newCurrency);//setCurrency(newCurrency);
+        return currencyService.setObject(newCurrency);
     }
     
     @PutMapping("/admin/refreshFulCurrency")
-    public ResponseEntity<?> updateFullCurrency(
+    public ResponseEntity<?> refreshFullCurrency(
             @Parameter(
                 description = "Id валюты для обновления"
             )
@@ -123,7 +123,7 @@ public class CurrencyController {
             return currencyService.refreshCurrency(id, сurrencyForUpdate, false);
         } catch (Throwable t)
         {
-            System.err.println("ОШИБКА: UserController.refreshFullUser() - метод принимает целый обьект в формате json: " + t.getMessage());
+            System.err.println("ОШИБКА: CurrencyController.refreshFullCurrency() - метод принимает целый обьект в формате json: " + t.getMessage());
             
             return ResponseEntity.badRequest()
                     .body("ОШИБКА - json составлен неправильно (принимает полноценный обьект)");
