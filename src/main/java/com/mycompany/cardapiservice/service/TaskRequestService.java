@@ -16,17 +16,17 @@ import org.springframework.stereotype.Service;
 public class TaskRequestService {
     private TaskRequestRepository taskRequestRepository;
     private OperationService operationService;
-    private TaskStatusRepository taskStatusRepository;
+    private TaskStatusService taskStatusService;
     
     public TaskRequestService(
             TaskRequestRepository taskRequestRepository,
             OperationService operationService,
-            TaskStatusRepository taskStatusRepository
+            TaskStatusService taskStatusService
     )
     {
         this.taskRequestRepository = taskRequestRepository;
         this.operationService = operationService;
-        this.taskStatusRepository = taskStatusRepository;
+        this.taskStatusService = taskStatusService;
     }
     
     public ResponseEntity<?> createTask(TaskRequestDto taskRequestDto, User currentUser)
@@ -39,7 +39,7 @@ public class TaskRequestService {
                 operationService.getObjectById(taskRequestDto.getOperationDto().getId())
         );
         newTaskRequest.setTaskStatus(
-                taskStatusRepository.getTaskStatusById(taskRequestDto.getTaskStatusDto().getId())
+                taskStatusService.getObjectById(taskRequestDto.getTaskStatusDto().getId())
         );
 
         taskRequestRepository.save(newTaskRequest);

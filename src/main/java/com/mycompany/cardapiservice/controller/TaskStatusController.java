@@ -1,7 +1,7 @@
 package com.mycompany.cardapiservice.controller;
 
-import com.mycompany.cardapiservice.dto.CurrencyDto;
-import com.mycompany.cardapiservice.service.CurrencyService;
+import com.mycompany.cardapiservice.dto.TaskStatusDto;
+import com.mycompany.cardapiservice.service.TaskStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -24,19 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping("api/currency")
-@Tag(name = "Апи Справочника валюты", description = "Операции над валютой")
-public class CurrencyController {
-    public CurrencyService currencyService;
+@RequestMapping("api/taskStatus")
+@Tag(name = "Апи Справочника статуса задач", description = "Операции над статусами задач")
+public class TaskStatusController {
+    public TaskStatusService taskStatusService;
     
-    public CurrencyController(CurrencyService currencyService)
+    public TaskStatusController(TaskStatusService taskStatusService)
     {
-        this.currencyService = currencyService;
+        this.taskStatusService = taskStatusService;
     }
     
-    @GetMapping("/admin/getAllCurrency")
+    @GetMapping("/admin/getAllTaskStatus")
     @Operation(
-        summary = "Получить список валют по пагинации", 
+        summary = "Получить список статусов задач по пагинации", 
         description = "Возвращает список валют"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
@@ -45,7 +45,7 @@ public class CurrencyController {
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
             required = true
     )
-    public List<CurrencyDto> getAllCurrency(
+    public List<TaskStatusDto> getAllCurrency(
             @Parameter(
                 description = "Номер страницы (начинается с 0)",
                 example = "0"
@@ -61,13 +61,13 @@ public class CurrencyController {
     {
         Pageable pageable = PageRequest.of(page, size);
         
-        return currencyService.prepareObjects(pageable);
+        return taskStatusService.prepareObjects(pageable);
     }
     
-    @GetMapping("/admin/getCurrencyById")
+    @GetMapping("/admin/getTaskStatusById")
     @Operation(
-        summary = "Получить конкретную валюту по id", 
-        description = "Возвращает конкретную валюту"
+        summary = "Получить конкретный статус задачи по id", 
+        description = "Возвращает конкретный статус задачи"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
             in = ParameterIn.HEADER,
@@ -75,20 +75,20 @@ public class CurrencyController {
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
             required = true
     )
-    public CurrencyDto getCurrencyById(
+    public TaskStatusDto getTaskStatusById(
             @Parameter(
-                description = "Код валюты"
+                description = "Код статуса задачи"
             )
             @RequestParam(value = "id", required = false) Long id
     )
     {
-        return new CurrencyDto(currencyService.getObjectById(id));
+        return new TaskStatusDto(taskStatusService.getObjectById(id));
     }
     
-    @PostMapping("/admin/setCurrency")
+    @PostMapping("/admin/setTaskStatus")
     @Operation(
-        summary = "Сохранить конкретную валюту по id", 
-        description = "Возвращает конкретную валюту"
+        summary = "Сохранить конкретный статус задачи по id", 
+        description = "Возвращает конкретный статус задачи"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
             in = ParameterIn.HEADER,
@@ -96,43 +96,43 @@ public class CurrencyController {
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
             required = true
     )
-    public ResponseEntity<?> setCurrency(
+    public ResponseEntity<?> setTaskStatus(
             @Parameter(
-                description = "Обьект валюты в формате json"
+                description = "Обьект статуса задачи в формате json"
             )
-            @RequestBody CurrencyDto newCurrency
+            @RequestBody TaskStatusDto newTaskStatus
     )
     {
-        return currencyService.setObject(newCurrency);
+        return taskStatusService.setObject(newTaskStatus);
     }
     
-    @PutMapping("/admin/refreshFullCurrency")
+    @PutMapping("/admin/refreshFullTaskStatus")
     public ResponseEntity<?> refreshFullCurrency(
             @Parameter(
-                description = "Id валюты для обновления"
+                description = "Id статуса задачи для обновления"
             )
             @RequestParam(value = "id", required = true) Long id,
             
             @Parameter(
-                description = "Обьект валюты в формате json"
+                description = "Обьект статуса задачи в формате json"
             )
-            @RequestBody CurrencyDto сurrencyForUpdate
+            @RequestBody TaskStatusDto taskStatusForUpdate
     )
     {
         try {
-            return currencyService.refreshCurrency(id, сurrencyForUpdate, false);
+            return taskStatusService.refreshTaskStatus(id, taskStatusForUpdate, false);
         } catch (Throwable t)
         {
-            System.err.println("ОШИБКА: CurrencyController.refreshFullCurrency() - метод принимает целый обьект в формате json: " + t.getMessage());
+            System.err.println("ОШИБКА: TAskStatusController.refreshFullTaskStatus() - метод принимает целый обьект в формате json: " + t.getMessage());
             
             return ResponseEntity.badRequest()
                     .body("ОШИБКА - json составлен неправильно (принимает полноценный обьект)");
         }
     }
     
-    @PatchMapping("/admin/refreshPartCurrency")
+    @PatchMapping("/admin/refreshPartTaskStatus")
     @Operation(
-        summary = "Обновить (частично) данные о конкретном пользователе (для админов)", 
+        summary = "Обновить (частично) данные о статусе задачи (для админов)", 
         description = "Возвращает статус выполнения"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
@@ -143,18 +143,18 @@ public class CurrencyController {
     )
     public ResponseEntity<?> refreshPartCurrency(
             @Parameter(
-                description = "Id валюты для обновления"
+                description = "Id статуса задачи для обновления"
             )
             @RequestParam(value = "id", required = true) Long id,
             
             @Parameter(
-                description = "Обьект валюты в формате json"
+                description = "Обьект статуса задачи в формате json"
             )
-            @RequestBody CurrencyDto currencyDto
+            @RequestBody TaskStatusDto taskStatusDto
     )
     {
         try {
-            return currencyService.refreshCurrency(id, currencyDto, false);
+            return taskStatusService.refreshTaskStatus(id, taskStatusDto, false);
         } catch (Throwable t)
         {
             System.err.println("ОШИБКА: UserController.refreshFullUser() - метод принимает целый обьект в формате json: " + t.getMessage());
@@ -164,9 +164,9 @@ public class CurrencyController {
         }
     }
     
-    @DeleteMapping("/admin/deleteCurrency")
+    @DeleteMapping("/admin/deleteTaskStatus")
     @Operation(
-        summary = "Удалить данные о конкретной валюте", 
+        summary = "Удалить данные о конкретноv статусе задачи", 
         description = "Возвращает статус выполнения"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
@@ -177,11 +177,12 @@ public class CurrencyController {
     )
     public ResponseEntity<?> deleteCurrency(
         @Parameter(
-            description = "Id валюты для обновления"
+            description = "Id статуса задачи для обновления"
         )
         @RequestParam(value = "id", required = true) Long id
     )
     {
-        return currencyService.deleteObject(id);
+        return taskStatusService.deleteObject(id);
     }
+    
 }

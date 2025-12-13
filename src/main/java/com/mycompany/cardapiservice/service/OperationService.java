@@ -12,19 +12,18 @@ public class OperationService extends ExtendedUniversalWriteEndpointsService<Ope
     private OperationRepository operationRepository;
     
     public OperationService(
-            JpaRepository<Operation, Long> repository,
             OperationRepository operationRepository
     )
     {
-        super(repository);
+        super(operationRepository);
         
         this.operationRepository = operationRepository;
     }
     
     /**
      * Обновить валюту (заменить данные обьекта, или его целиком - в зависимости от isSaveByPart).
-     * @param idOperationForUpdate Id валюты для обновления.
-     * @param refreshedOperation Обьект валюты доля обновления.
+     * @param idOperationForUpdate Id операции для обновления.
+     * @param refreshedOperation Обьект операции для обновления.
      * @param isSaveByPart
      * true - обновить конкретное поле/поля в данном обьекте (не целый обьект - для PATCH);
      * false - обновить обьект целиком (для PUT).
@@ -44,7 +43,7 @@ public class OperationService extends ExtendedUniversalWriteEndpointsService<Ope
             System.err.println("ОШИБКА: OperationService.refreshOperation() проверка полей вызвало исключение: " + t.getMessage());
             
             return ResponseEntity.badRequest()
-               .body("Ошибка при обновлении валюты: " + t.getMessage());
+               .body("Ошибка при обновлении операции: " + t.getMessage());
         }
         
         return ResponseEntity.ok("операция успешно обновлена!");

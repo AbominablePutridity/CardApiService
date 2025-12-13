@@ -4,6 +4,7 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\CardTransferController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\CurrencyController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\OperationController.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\TaskStatusController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\TeskRequestController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\controller\UserController.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\auth\AuthorizationDto.java
@@ -43,4 +44,5 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\OperationService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\StatusCardService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\TaskRequestService.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\TaskStatusService.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\service\UserService.java
