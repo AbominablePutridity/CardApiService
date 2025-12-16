@@ -192,7 +192,7 @@ public class CardService extends ExtendedUniversalWriteEndpointsService<Card, Ca
         try {
             Card newCard = cardDto.toEntity();
             newCard.setUser(userService.getObjectById(cardDto.getUserDto().getId()));
-            newCard.setStatusCard(statusCardService.getStatusCardById(cardDto.getStatusCardDto().getId()));
+            newCard.setStatusCard(statusCardService.getObjectById(cardDto.getStatusCardDto().getId()));
             newCard.setCurrency(currencyService.getObjectById(cardDto.getCurrencyDto().getId()));
             
             cardRepository.save(newCard);
@@ -232,7 +232,7 @@ public class CardService extends ExtendedUniversalWriteEndpointsService<Card, Ca
 
                 if(refreshedCard.getStatusCardDto() != null)
                 {
-                    updatedCardObject.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
+                    updatedCardObject.setStatusCard(statusCardService.getObjectById(refreshedCard.getStatusCardDto().getId()));
                 }
                 
                 if(refreshedCard.getCurrencyDto() != null)
@@ -241,7 +241,7 @@ public class CardService extends ExtendedUniversalWriteEndpointsService<Card, Ca
                 }
             } else {
                 updatedCardObject.setUser(userService.getObjectById(refreshedCard.getUserDto().getId()));
-                updatedCardObject.setStatusCard(statusCardService.getStatusCardById(refreshedCard.getStatusCardDto().getId()));
+                updatedCardObject.setStatusCard(statusCardService.getObjectById(refreshedCard.getStatusCardDto().getId()));
                 updatedCardObject.setCurrency(currencyService.getObjectById(refreshedCard.getCurrencyDto().getId()));
             }
             cardRepository.save(card);

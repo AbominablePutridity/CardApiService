@@ -23,6 +23,7 @@ com\mycompany\cardapiservice\service\BasedUniversalEndpointsService.class
 com\mycompany\cardapiservice\dto\StatusCardDto.class
 com\mycompany\cardapiservice\service\CardTransferService.class
 com\mycompany\cardapiservice\dto\OperationDto.class
+com\mycompany\cardapiservice\controller\StatusCardController.class
 com\mycompany\cardapiservice\service\TaskStatusService.class
 com\mycompany\cardapiservice\controller\TaskStatusController.class
 com\mycompany\cardapiservice\entity\TaskRequest.class
