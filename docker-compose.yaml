@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # Настройка базы данных
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=card_api
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
+
+  # Настройка твоего приложения
+  app:
+    build: .
+    container_name: spring_app
+    ports:
+      - "8081:8081"
+    environment:
+      # Переопределяем URL, чтобы приложение искало БД внутри сети Docker по имени сервиса 'db'
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/card_api
+    depends_on:
+      - db
