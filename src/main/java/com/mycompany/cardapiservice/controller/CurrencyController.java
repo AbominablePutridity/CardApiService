@@ -177,7 +177,7 @@ public class CurrencyController {
     )
     public ResponseEntity<?> deleteCurrency(
         @Parameter(
-            description = "Id валюты для обновления"
+            description = "Id валюты для удаления"
         )
         @RequestParam(value = "id", required = true) Long id
     )
