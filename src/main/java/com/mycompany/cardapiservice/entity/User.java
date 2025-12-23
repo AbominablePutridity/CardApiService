@@ -37,10 +37,6 @@ public class User {
     @Column(name = "patronymic")
     private String patronymic;
     
-//    @Column(name = "roles")
-//    @Enumerated(EnumType.STRING)
-//    private List<Role> roles = new ArrayList<>();
-    
     @Column(name = "role")
     private String role;
     
@@ -49,6 +45,9 @@ public class User {
     
     @Column(name = "password")
     private String password;
+    
+    @Column(name = "is_blocked")
+    private Boolean isBlocked = true;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Card> cards = new ArrayList<>();
@@ -87,14 +86,6 @@ public class User {
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
     }
-
-//    public List<Role> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(List<Role> roles) {
-//        this.roles = roles;
-//    }
 
     public String getLogin() {
         return login;
@@ -160,5 +151,13 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, surname, patronymic, role, login, password);
+    }
+
+    public Boolean getIsBlocked() {
+        return isBlocked;
+    }
+
+    public void setIsBlocked(Boolean isBlocked) {
+        this.isBlocked = isBlocked;
     }
 }

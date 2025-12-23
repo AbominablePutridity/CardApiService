@@ -51,6 +51,11 @@ public class UserService extends ExtendedUniversalWriteEndpointsService<User, Us
         if (currentUser.isPresent()) {
             User user = currentUser.get();
             
+            if(user.getIsBlocked())
+            {
+                return "К сожалению, данный пользователь является заблокированным: пожалуйста, обратитесь к администратору!";
+            }
+            
             //используем passwordEncoder!
             if (passwordEncoder.matches(userAuthData.getPassword(), user.getPassword())) {
                 

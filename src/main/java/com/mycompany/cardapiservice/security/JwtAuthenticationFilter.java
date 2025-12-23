@@ -1,5 +1,7 @@
 package com.mycompany.cardapiservice.security;
 
+import com.mycompany.cardapiservice.entity.User;
+import com.mycompany.cardapiservice.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +23,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private UserRepository userRepository;
+    
+    public JwtAuthenticationFilter(UserRepository userRepository)
+    {
+        this.userRepository = userRepository;
+    }
     
     @Override
     protected void doFilterInternal(HttpServletRequest request, 
@@ -52,21 +60,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 5. Если токен валиден, извлекаем из него логин (username) и роль
                 String username = TockenSecurity.validateTokenAndGetUsername(token);
                 String role = TockenSecurity.getRoleFromToken(token);
-                System.out.println("Token valid! User: " + username + ", Role: " + role);
                 
-                // 6. Создаем список GrantedAuthority (ролей/прав доступа) для Spring Security.
-                // Важно: Spring Security автоматически добавляет префикс ROLE_ при использовании hasAnyRole(),
-                // поэтому мы должны добавить его здесь вручную.
-                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
-                
-                // 7. Создаем объект аутентификации Spring Security
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(username, null, authorities);
-                
-                // 8. Устанавливаем объект аутентификации в текущий контекст безопасности.
-                // Это позволяет остальной части приложения (включая SecurityConfig) знать, кто этот пользователь и какие у него роли.
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                System.out.println("Authentication set in SecurityContext");
+                //Ищем пользователя по логину и проверяем заблокирован ли он
+                User userObject = userRepository.findByLogin(username).get();
+                if((userObject != null) && (!userObject.getIsBlocked()))
+                {
+                    System.out.println("Token valid! User: " + username + ", Role: " + role);
+
+                    // 6. Создаем список GrantedAuthority (ролей/прав доступа) для Spring Security.
+                    // Важно: Spring Security автоматически добавляет префикс ROLE_ при использовании hasAnyRole(),
+                    // поэтому мы должны добавить его здесь вручную.
+                    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
+                    // 7. Создаем объект аутентификации Spring Security
+                    UsernamePasswordAuthenticationToken authentication = 
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+                    // 8. Устанавливаем объект аутентификации в текущий контекст безопасности.
+                    // Это позволяет остальной части приложения (включая SecurityConfig) знать, кто этот пользователь и какие у него роли.
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println("Authentication set in SecurityContext");
+                } else {
+                    System.out.println("This current user is blocked!");
+                }
             } else {
                 System.out.println("Token invalid!");
             }
