@@ -44,6 +44,7 @@ com\mycompany\cardapiservice\service\StatusCardService.class
 com\mycompany\cardapiservice\service\ExtendedUniversalWriteEndpointsService.class
 com\mycompany\cardapiservice\repository\TaskStatusRepository.class
 com\mycompany\cardapiservice\entity\Operation.class
+com\mycompany\cardapiservice\dto\PasswordKeeperDto.class
 com\mycompany\cardapiservice\repository\StatusCardRepository.class
 com\mycompany\cardapiservice\service\UserService.class
 com\mycompany\cardapiservice\dto\interfaces\TransferableDtoToEntity.class

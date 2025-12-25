@@ -14,6 +14,7 @@ C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardap
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\CurrencyDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\interfaces\TransferableDtoToEntity.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\OperationDto.java
+C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\PasswordKeeperDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\StatusCardDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\TaskRequestDto.java
 C:\Users\User\Desktop\java api\CardApiService\src\main\java\com\mycompany\cardapiservice\dto\TaskStatusDto.java

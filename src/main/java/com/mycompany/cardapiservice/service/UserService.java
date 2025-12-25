@@ -1,6 +1,7 @@
 package com.mycompany.cardapiservice.service;
 
 import com.mycompany.cardapiservice.dto.CardDto;
+import com.mycompany.cardapiservice.dto.PasswordKeeperDto;
 import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.dto.auth.AuthorizationDto;
 import com.mycompany.cardapiservice.entity.Card;
@@ -154,6 +155,32 @@ public class UserService extends ExtendedUniversalWriteEndpointsService<User, Us
         }
         
         return new UserDto(user);
+    }
+    
+    /**
+     * Зарегестрировать нового пользователя в системе по данным из формы (с паролем).
+     * @param newUserData Данные о новом пользователе в системе.
+     * @return Статус выполнение.
+     */
+    public ResponseEntity<?> registerNewUser(PasswordKeeperDto newUserData)
+    {
+        try {
+            if(userRepository.findByLogin(newUserData.getLogin()).isPresent()) {
+                return ResponseEntity.badRequest()
+                    .body("Ошибка ввода данных: Пользователь с таким логином существует! Попробуйте зарегестрироваться под другим логином.");
+            }
+            
+            User newUser = newUserData.setDataInObject(new User(), passwordEncoder);
+
+            userRepository.save(newUser);
+        } catch (Throwable t)
+        {
+            return ResponseEntity.badRequest()
+                    .body("Ошибка сохранения сущности UserService.registerNewUser(): " + t.getMessage());
+        }
+        
+        return ResponseEntity.ok()
+                .body("Пользователь успешно сохранен! Дождитесь подерации от админа для успешного входа в свой аккаунт!");
     }
 
     @Override

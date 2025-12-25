@@ -41,10 +41,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/users/guest/getEntryTocken", "/public/**", "/static/**",
+                    .requestMatchers("/api/users/guest/getEntryTocken",   // роут для входа пользователя (взятие токена)
+                            "/public/**", "/static/**",
                             "/swagger-ui/**",       // ВСЕ страницы Swagger UI
                             "/v3/api-docs/**",      // OpenAPI спецификация
-                            "/swagger-ui.html"     // Главная страница Swagger
+                            "/swagger-ui.html",     // Главная страница Swagger
+                            "/api/users/guest/**"      // Роут с регистрацией пользователя
+                            
                     )
                     .permitAll() // эти страницы доступны всем
 

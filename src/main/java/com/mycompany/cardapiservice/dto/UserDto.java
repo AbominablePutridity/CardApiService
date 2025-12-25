@@ -15,6 +15,7 @@ public class UserDto implements TransferableDtoToEntity<User> {
     private String name;
     private String patronymic;
     private String role;
+    private Boolean isBlocked;
     
     public UserDto(){} // для сериализатора
     
@@ -76,6 +77,14 @@ public class UserDto implements TransferableDtoToEntity<User> {
         this.role = role;
     }
 
+    public Boolean getIsBlocked() {
+        return isBlocked;
+    }
+
+    public void setIsBlocked(Boolean isBlocked) {
+        this.isBlocked = isBlocked;
+    }
+
     /**
      * Перевод DTO класса в сущность
      * тут добавляем аттрибуты без ключей - ключи добавляем в сервисах.
@@ -94,11 +103,12 @@ public class UserDto implements TransferableDtoToEntity<User> {
      * @param cardObject Обьект сущности, в который сохраняем данные из этого DTO класса
      * @return Обьект сущности с данными
      */
-    private User setDataInObject(User user) {
+    public User setDataInObject(User user) {
         user.setName(name);
         user.setSurname(surname);
         user.setRole(role);
         user.setLogin(login);
+        user.setIsBlocked(isBlocked);
         
         return user;
     }
@@ -135,6 +145,11 @@ public class UserDto implements TransferableDtoToEntity<User> {
             if(login != null)
             {
                 objectForUpdate.setLogin(login);
+            }
+            
+            if(isBlocked != null)
+            {
+                objectForUpdate.setIsBlocked(isBlocked);
             }
         } else {
             objectForUpdate = setDataInObject(objectForUpdate);

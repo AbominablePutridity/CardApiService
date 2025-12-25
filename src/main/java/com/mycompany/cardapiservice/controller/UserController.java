@@ -1,5 +1,6 @@
 package com.mycompany.cardapiservice.controller;
 
+import com.mycompany.cardapiservice.dto.PasswordKeeperDto;
 import com.mycompany.cardapiservice.dto.UserDto;
 import com.mycompany.cardapiservice.dto.auth.AuthorizationDto;
 import com.mycompany.cardapiservice.service.UserService;
@@ -57,6 +58,31 @@ public class UserController {
     )
     {
         return userService.findUserByAuthData(userAuthData);
+    }
+    
+    @PostMapping("/guest/register")
+    @Operation(summary = "Зарегестрироваться в системе", 
+               description = "Возвращает статус выполнения")
+    private ResponseEntity<?> registerNewUser(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                content = @Content(
+                    examples = @ExampleObject(
+                        value = """
+                            {
+                              "login": "login",
+                              "surname": "surname",
+                              "name": "name",
+                              "patronymic": "patronumic",
+                              "password": "password"
+                            }
+                            """
+                    )
+                )
+            )
+            @RequestBody PasswordKeeperDto newUserData
+    )
+    {
+        return userService.registerNewUser(newUserData);
     }
     
     @GetMapping("/admin/getAllUsers")
