@@ -1,5 +1,6 @@
 package com.mycompany.cardapiservice.configuration;
 
+import com.mycompany.cardapiservice.enums.Role;
 import com.mycompany.cardapiservice.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -51,11 +52,11 @@ public class SecurityConfig {
                     )
                     .permitAll() // эти страницы доступны всем
 
-                    .requestMatchers("/api/card/user/**").hasAnyRole("USER") // только для пользователей
+                    .requestMatchers("/api/card/user/**").hasAnyRole(Role.ROLE_USER.getValue()) // только для пользователей
                         
                     .requestMatchers("/api/users/admin/**",
                             "/api/card/admin/**"
-                    ).hasAnyRole("ADMIN") // только для пользователей
+                    ).hasAnyRole(Role.ROLE_ADMIN.getValue()) // только для пользователей
                         
                     .anyRequest().authenticated() // остальные только для вошедших
                 )

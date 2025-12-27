@@ -256,6 +256,24 @@ public class CardService extends ExtendedUniversalWriteEndpointsService<Card, Ca
         return ResponseEntity.ok("пользователь успешно обновлен!");
     }
 
+    /**
+     * Возвращает список карт со скрытыми номерами. 
+     * @param cards Лист с картами для скрытия номеров.
+     * @return Лист карт со скрытыми номерами.
+     */
+    public List<CardDto> hideCardsNumber(List<CardDto> cards)
+    {
+        for(CardDto card : cards) {
+            try {
+                card.setNumber("**** **** **** " + card.getNumber().substring(12));
+            } catch (Throwable t) {
+                System.err.println("ОШИБКА CardService.hideCardsNumber - номер карты с id = " + card.getId() + " имеет неправильную длинну: " + t.getMessage());
+            }
+        }
+        
+        return cards;
+    }
+    
     @Override
     protected CardDto toDto(Card obj) {
         return new CardDto(obj); //конкретная реализация из абстрактного класса.

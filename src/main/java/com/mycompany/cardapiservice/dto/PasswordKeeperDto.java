@@ -1,6 +1,7 @@
 package com.mycompany.cardapiservice.dto;
 
 import com.mycompany.cardapiservice.entity.User;
+import com.mycompany.cardapiservice.enums.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -32,7 +33,7 @@ public class PasswordKeeperDto extends UserDto {
     public User setDataInObject(User user, PasswordEncoder passwordEncoder) {
         user.setName(super.getName());
         user.setSurname(super.getSurname());
-        user.setRole("USER"); // у запи, создаваемой пользователем роль всегда по умолчанию будет USER
+        user.setRole(Role.ROLE_USER.getValue()); // у запи, создаваемой пользователем роль всегда по умолчанию будет USER
         // (пока админ не изменит ее)
         user.setLogin(super.getLogin());
         

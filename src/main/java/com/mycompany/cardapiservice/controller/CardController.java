@@ -62,12 +62,25 @@ public class CardController {
                 example = "10"
             )
             @RequestParam(value = "size", defaultValue = "10") int size,
+            
+            @Parameter(
+                description = "Скрывать ли номера карт",
+                example = "false"
+            )
+            @RequestParam(value = "isHideCardNumber", defaultValue = "false") Boolean isHideCardNumber,
+            
             Authentication authentication //берем данные текущего пользователя для логина
     )
     { // далее будем брать логин из spring ыусгкшен
         Pageable pageable = PageRequest.of(page, size);
         
-        return cardService.prepareUserCards(authentication.getName(), pageable);
+        List<CardDto> allCards = cardService.prepareUserCards(authentication.getName(), pageable);
+        
+        if(isHideCardNumber) {
+            return cardService.hideCardsNumber(allCards);
+        } else {
+            return allCards;
+        }
     }
     
     @GetMapping("/admin/getUserCards")
