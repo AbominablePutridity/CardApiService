@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'MyCustomFont';
+    /* Исправленный путь: поднимаемся в папку Sagewold, затем снова в Sagewold, чтобы найти файл .otf */
+    src: url('../Sagewold-Regular.otf') format('opentype'); /* Поднимаемся дважды */
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

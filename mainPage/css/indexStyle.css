@@ -1,0 +1,12 @@
+.default-text {
+  font-family: 'MyCustomFont', sans-serif; /* sans-serif — запасной шрифт */
+  font-size: 30px;
+}
+
+.default-panel {
+  background-color: #ebf5f5;
+  /* Значение в пикселях (чем больше число, тем сильнее закругление) */
+  border-radius: 7px;
+  padding: 2px 15px 2px 15px;
+  margin: 10px 10px 10px 10px;
+}
