@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная - Банковский сервис</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!--Подключение моих стилей-->
+    <link rel="stylesheet" href="elements/card/css/cardStyle.css">
+    <link rel="stylesheet" href="elements/card/css/paginationPanelStyle.css">
+</head>
+<body>
+    <!--Шаблоны-->
+    <!--шаблон карт-->
+    <template id="card-template">
+        <div class="card">
+            <!--img class="card-image" src="" alt=""-->
+            <h3 class="card-title card-text"></h3>
+            <p class="card-owner-name card-text"></p>
+            <div class="card-salary left-text card-text"></div>
+            <p class="card-is-blocked left-text card-text"></p>
+            <button class="card-info left-text card-text">Подробнее</button>
+        </div>
+    </template>
+
+    <!--Заголовок-->
+    <div class="header">
+    </div>
+    
+    <!--Список карт-->
+    <div class="card-list">
+    </div>
+    <!--пагинация для списка карт-->
+    <div class="pagination-container">
+        <button id="pag-card-button-back">← Назад</button>
+        <span id="page-info">Страница 1</span>
+        <button id="pag-card-button-forward">Вперед →</button>
+    </div>
+    
+    <!--Основные вкладки-->
+    <div class="tabs">
+    </div>
+
+    <script src="elements/card/js/data/cardData.js"></script>
+    <script src="elements/card/js/cardDataManager.js"></script>
+    
+</body>
