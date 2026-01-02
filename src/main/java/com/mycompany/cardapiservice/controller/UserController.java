@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -159,6 +160,24 @@ public class UserController {
     )
     {
         return userService.getUserByIdOrLogin(id, login);
+    }
+    
+    @GetMapping("/user/getCurrentUserObject")
+    @Operation(
+        summary = "Получить текущего пользователя по его токену", 
+        description = "Возвращает текущего пользователя"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = true
+    )
+    public UserDto getcurrentUser(
+            Authentication authentication //берем данные текущего пользователя для логина
+    )
+    {
+        return new UserDto(userService.getCurrentUserByLogin(authentication.getName()));
     }
     
     @PutMapping("/admin/refreshFullUser")

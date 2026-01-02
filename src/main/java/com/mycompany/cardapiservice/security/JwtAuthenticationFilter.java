@@ -62,7 +62,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String role = TockenSecurity.getRoleFromToken(token);
                 
                 //Ищем пользователя по логину и проверяем заблокирован ли он
-                User userObject = userRepository.findByLogin(username).get();
+                User userObject = null;
+                
+                if(userRepository.findByLogin(username).isPresent()) { // проверяем на наличие в БД, перед тем как взять обьект
+                    // (без этой проверки - не сможет взять данные, если их нет в бд => будет бесконечная загрузка)
+                    userObject = userRepository.findByLogin(username).get();
+                }
+                
                 if((userObject != null) && (!userObject.getIsBlocked()))
                 {
                     System.out.println("Token valid! User: " + username + ", Role: " + role);
