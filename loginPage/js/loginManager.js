@@ -20,6 +20,12 @@ document.querySelector('form').addEventListener('submit', (e) => {
   ).done(function(token) {
     // ТОКЕН ЗДЕСЬ!
     console.log("The token = " + token);
+    
+    // ВРУЧНУЮ сохраняем токен
+    sessionStorage.setItem('jwtToken', token);
+    console.log("Токен сохранен:", token);
+    window.location.href = '../mainPage/index.html.html';
+    
     // localStorage.setItem('jwtToken', token);
     // window.location.href = 'cards.html';
   }).fail(function() {

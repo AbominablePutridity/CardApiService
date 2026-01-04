@@ -7,7 +7,8 @@ function dataGet(headerToken, endpoint, params = {}) {
         type: 'GET',
         data: params, // jQuery сам превратит в query string
         headers: {
-            'Authorization': `Bearer ${headerToken}`
+            'Authorization': `Bearer ${headerToken}`,
+            'X-Api-Tocken': `Bearer ${headerToken}`,
         },
         dataType: 'json' // jQuery сам распарсит JSON
     });
@@ -20,6 +21,7 @@ function dataPost(headerToken, endpoint, jsonData = {}) {
         type: 'POST',
         headers: {
             'Authorization': `Bearer ${headerToken}`,
+            'X-Api-Tocken': `Bearer ${headerToken}`,
             'Content-Type': 'application/json'
         },
         data: JSON.stringify(jsonData), // Отправляем как JSON
