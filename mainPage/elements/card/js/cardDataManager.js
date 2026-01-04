@@ -1,13 +1,17 @@
+//Скрипт с методами отрисовки данных карт пользователя на главной
+
 // 1. Находим контейнер, куда будем вставлять карты
 const cardList = document.querySelector('.card-list');
 
 // 2. Находим сам шаблон
 const template = document.querySelector('#card-template');
 
-// Настройки пагинации
-let currentPage = 1;      // Текущая страница
-let itemsPerPage = 3;     // Сколько карточек выводить на одной странице
-
+/**
+ * Создание/Отрисовка данных карт после получения массивов с данными о картах пользователя.
+ * (Вызываем ТОЛЬКО после получения данных о картах, в файле cardData.js - после получения данных карт:
+ * Этот метод только отрисоввывает карты по полученному массиву карт)
+ * @param page Номер страницы для отрисовки карт (пагинация)
+ */
 function renderCards(page) {
     const cardList = document.querySelector('.card-list');
     cardList.innerHTML = ''; // Очищаем список перед отрисовкой новой страницы
@@ -40,9 +44,6 @@ function renderCards(page) {
         cardList.appendChild(cardElement);
     }
 }
-
-// Вызов функции при загрузке (первая страница)
-renderCards(currentPage);
 
 //Пагинация карт
 btnBack = document.getElementById("pag-card-button-back");

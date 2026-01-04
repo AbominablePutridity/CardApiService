@@ -1,4 +1,29 @@
-const cardsData = [
+//Скрипт, хранящий данные о картах пользователя и вызов отрисовки этих данных
+
+// Настройки пагинации
+let currentPage = 0;      // Текущая страница
+let itemsPerPage = 3;     // Сколько карточек выводить на одной странице
+
+let cardsData = []; // Здесь будут наши данные карт текущего пользователя
+
+//берем данные о картах нашего пользователя из API
+dataGet(
+    sessionStorage.getItem('jwtToken'), // берем наш токен из сессии
+    `api/card/user/getAllCards?page=${currentPage}&size=${itemsPerPage}&isHideCardNumber=true`,
+    
+  ).done(function(data) {
+    // ДАННЫЕ ЗДЕСЬ!
+    console.log("The data = ", data);
+
+    cardsData = data; //приравниваем данные из api в массив cardsData, из которых будем брать данные о картах пользователя на отрисовку
+
+    // Вызов функции при загрузке (первая страница)
+    renderCards(currentPage+1);
+  }).fail(function() {
+    alert("Login failed!");
+});
+
+/*[
  {
     balance: 1000,
     currencyDto: {
@@ -74,26 +99,4 @@ const cardsData = [
     },
     validityPeriod: "2025-11-28"
   }
-]
-
-
-// [
-//     {
-//         title: "Разработчик интерфейсов",
-//         owner: "Банк Будущего",
-//         salary: "от 250 000 ₽",
-//         image: "via.placeholder.com"
-//     },
-//     {
-//         title: "Аналитик данных",
-//         owner: "ФинТех Системы",
-//         salary: "до 300 000 ₽",
-//         image: "via.placeholder.com"
-//     },
-//     {
-//         title: "Product Manager",
-//         owner: "Digital Lab",
-//         salary: "по договоренности",
-//         image: "via.placeholder.com"
-//     }
-//];
+]*/

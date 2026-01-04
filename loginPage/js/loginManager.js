@@ -1,11 +1,11 @@
-// HTML: <input id="login" ...> <input id="password" ...>
-
 // событие на отправку формы
 document.querySelector('form').addEventListener('submit', (e) => {
   e.preventDefault(); // отменяем стандартное поведение отправки формы
   
   const login = document.getElementById('loginField').value; // берем данные из логина
   const password = document.getElementById('passwordField').value; // берем данные пароля
+
+  resultLabel = document.getElementById("result");
   
   console.log(login, password);
 
@@ -22,17 +22,17 @@ document.querySelector('form').addEventListener('submit', (e) => {
     console.log("The token = " + token);
     
     // ВРУЧНУЮ сохраняем токен
-    sessionStorage.setItem('jwtToken', token);
-    console.log("Токен сохранен:", token);
-    window.location.href = '../mainPage/index.html.html';
+    if(token != null && token != '') {
+      sessionStorage.setItem('jwtToken', token);
+      console.log("Токен сохранен:", token);
+      window.location.href = '../mainPage/index.html';
+    } else {
+      resultLabel.textContent = "Ошибка: введены неверные данные!";
+    }
     
-    // localStorage.setItem('jwtToken', token);
-    // window.location.href = 'cards.html';
   }).fail(function() {
     alert("Login failed!");
   });
-
-  console.log("The tocken = " + responseResult);
 });
 
 
