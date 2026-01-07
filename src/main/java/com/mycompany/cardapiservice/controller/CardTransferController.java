@@ -42,7 +42,7 @@ public class CardTransferController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> getTransfer(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(

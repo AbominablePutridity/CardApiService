@@ -35,6 +35,16 @@ public class OperationController {
     }
 
     @GetMapping("/admin/getAllOperations")
+    @Operation(
+        summary = "Взять список всех операций", 
+        description = "Возвращает статус выполнения"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = false
+    )
     public List<OperationDto> getAllOperations(
             @Parameter(
                 description = "Номер страницы (начинается с 0)",
@@ -63,7 +73,7 @@ public class OperationController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public OperationDto getOperationById(
             @Parameter(
@@ -84,7 +94,7 @@ public class OperationController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> setOperation(
             @Parameter(
@@ -97,6 +107,16 @@ public class OperationController {
     }
     
     @PutMapping("/admin/refreshFulCurrency")
+    @Operation(
+        summary = "Создать данные о конкретной операции (для админов)", 
+        description = "Возвращает статус выполнения"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = false
+    )
     public ResponseEntity<?> updateFullOperation(
             @Parameter(
                 description = "Id операции для обновления"
@@ -129,7 +149,7 @@ public class OperationController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> refreshPartCurrency(
             @Parameter(
@@ -163,7 +183,7 @@ public class OperationController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> deleteCurrency(
         @Parameter(

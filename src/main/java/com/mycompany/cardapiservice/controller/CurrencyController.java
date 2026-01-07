@@ -43,7 +43,7 @@ public class CurrencyController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public List<CurrencyDto> getAllCurrency(
             @Parameter(
@@ -73,7 +73,7 @@ public class CurrencyController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public CurrencyDto getCurrencyById(
             @Parameter(
@@ -94,7 +94,7 @@ public class CurrencyController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> setCurrency(
             @Parameter(
@@ -107,6 +107,16 @@ public class CurrencyController {
     }
     
     @PutMapping("/admin/refreshFullCurrency")
+    @Operation(
+        summary = "Обновить конкретную валюту по id", 
+        description = "Возвращает конкретную валюту"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = false
+    )
     public ResponseEntity<?> refreshFullCurrency(
             @Parameter(
                 description = "Id валюты для обновления"
@@ -139,7 +149,7 @@ public class CurrencyController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> refreshPartCurrency(
             @Parameter(
@@ -173,7 +183,7 @@ public class CurrencyController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> deleteCurrency(
         @Parameter(

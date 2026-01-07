@@ -43,7 +43,7 @@ public class TaskStatusController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public List<TaskStatusDto> getAllCurrency(
             @Parameter(
@@ -73,7 +73,7 @@ public class TaskStatusController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public TaskStatusDto getTaskStatusById(
             @Parameter(
@@ -94,7 +94,7 @@ public class TaskStatusController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> setTaskStatus(
             @Parameter(
@@ -107,6 +107,16 @@ public class TaskStatusController {
     }
     
     @PutMapping("/admin/refreshFullTaskStatus")
+    @Operation(
+        summary = "Обновить конкретный статус задачи по id", 
+        description = "Возвращает конкретный статус задачи"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = false
+    )
     public ResponseEntity<?> refreshFullCurrency(
             @Parameter(
                 description = "Id статуса задачи для обновления"
@@ -139,7 +149,7 @@ public class TaskStatusController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> refreshPartCurrency(
             @Parameter(
@@ -173,7 +183,7 @@ public class TaskStatusController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> deleteCurrency(
         @Parameter(
@@ -184,5 +194,4 @@ public class TaskStatusController {
     {
         return taskStatusService.deleteObject(id);
     }
-    
 }

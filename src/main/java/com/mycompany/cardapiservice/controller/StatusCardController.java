@@ -43,7 +43,7 @@ public class StatusCardController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public List<StatusCardDto> getAllStatusCard(
             @Parameter(
@@ -73,7 +73,7 @@ public class StatusCardController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public StatusCardDto getStatusCardById(
             @Parameter(
@@ -94,7 +94,7 @@ public class StatusCardController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> setCurrency(
             @Parameter(
@@ -106,7 +106,17 @@ public class StatusCardController {
         return statusCardService.setObject(newStatusCardDto);
     }
     
-    @PutMapping("/admin/refreshFullCurrency")
+    @PutMapping("/admin/refreshFullStatusCard")
+    @Operation(
+        summary = "Сохранить конкретный статус карт по id", 
+        description = "Возвращает конкретную валюту"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = false
+    )
     public ResponseEntity<?> refreshFullStatusCard(
             @Parameter(
                 description = "Id валюты для обновления"
@@ -139,7 +149,7 @@ public class StatusCardController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> refreshPartStatusCard(
             @Parameter(
@@ -164,7 +174,7 @@ public class StatusCardController {
         }
     }
     
-    @DeleteMapping("/admin/deleteCurrency")
+    @DeleteMapping("/admin/deleteStatusCard")
     @Operation(
         summary = "Удалить данные о конкретном статусе карты", 
         description = "Возвращает статус выполнения"
@@ -173,7 +183,7 @@ public class StatusCardController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> deleteCurrency(
         @Parameter(

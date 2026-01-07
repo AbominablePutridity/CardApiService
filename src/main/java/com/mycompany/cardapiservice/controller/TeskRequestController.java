@@ -56,7 +56,7 @@ public class TeskRequestController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     @ApiResponse(responseCode = "200", description = "Успешное сохранение заявки")
     public ResponseEntity<?> createTaskRequest(
@@ -97,7 +97,7 @@ public class TeskRequestController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public List<TaskRequestDto> getAllTaskRequest(
             @Parameter(
@@ -127,7 +127,7 @@ public class TeskRequestController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public TaskRequestDto getCurrencyById(
             @Parameter(
@@ -148,7 +148,7 @@ public class TeskRequestController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> setTaskRequest(
             @Parameter(
@@ -161,6 +161,16 @@ public class TeskRequestController {
     }
     
     @PutMapping("/admin/refreshFullTaskRequest")
+    @Operation(
+        summary = "Обновить конкретную задачу по id", 
+        description = "Возвращает конкретную задачу"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = false
+    )
     public ResponseEntity<?> refreshFullTaskRequest(
             @Parameter(
                 description = "Id задачи для обновления"
@@ -193,7 +203,7 @@ public class TeskRequestController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> refreshPartCurrency(
             @Parameter(
@@ -227,7 +237,7 @@ public class TeskRequestController {
             in = ParameterIn.HEADER,
             name = "X-Api-Token", //ключ заголовка
             description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
-            required = true
+            required = false
     )
     public ResponseEntity<?> deleteCurrency(
         @Parameter(
