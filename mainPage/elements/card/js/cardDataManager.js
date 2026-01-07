@@ -40,6 +40,15 @@ function renderCards(page) {
         // Статус блокировки
         cardElement.querySelector('.card-is-blocked').textContent = data.isBlocked ? "Заблокирована" : "Активна";
 
+        //задаем уникальный идентификатор на кнопку "Подробнее" к каждой карте
+        let buttonInfo = cardElement.querySelector('.card-info');
+        buttonInfo.id = data.id;
+        //слушатель нажатия
+        buttonInfo.addEventListener('click', function() {
+            setCurrentCardId(buttonInfo.id);
+            setTabForCardData(data); // тут data - это один конкретный обьект из за цикла!!!
+        });
+
         // Добавляем готовую карточку в список
         cardList.appendChild(cardElement);
     }

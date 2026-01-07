@@ -54,11 +54,40 @@
     
     <!--Основные вкладки-->
     <div class="tabs default-panel">
-    sgsg
+        <!-- Панель с вкладками -->
+        <div class="tabs">
+            <button class="tab active" data-tab="tab1">О карте</button>
+            <button class="tab" data-tab="tab2">Транзакции</button>
+            <button class="tab" data-tab="tab3">Заявки</button>
+        </div>
+        
+        <!-- Содержимое вкладок (экраны) -->
+        <div id="screens">
+            <!-- <div class="screen active" id="tab1"> -->
+            <!--     <h2>О карте</h2> -->
+            <!--     <p>Это содержимое первой вкладки. Здесь может быть любая информация, текст, изображения или другие элементы.</p> -->
+            <!--     <p>Просто нажмите на другую вкладку сверху, чтобы переключиться на другой экран.</p> -->
+            <!-- </div> -->
+            
+            <!-- <div class="screen" id="tab2"> -->
+            <!--     <h2>Транзакции</h2> -->
+            <!--     <p>Это содержимое второй вкладки. Каждая вкладка имеет свой уникальный экран.</p> -->
+            <!--     <p>Когда вы переключаете вкладки, скрывается текущий экран и показывается новый.</p> -->
+            <!-- </div> -->
+            
+            <!-- <div class="screen" id="tab3"> -->
+            <!--     <h2>Заявки</h2> -->
+            <!--     <p>Это содержимое третьей вкладки.</p> -->
+            <!--     <p>Наш адрес: ул. Примерная, д. 123</p> -->
+            <!--     <p>Телефон: +7 (123) 456-78-90</p> -->
+            <!--     <p>Email: info@example.com</p> -->
+            <!-- </div> -->
+        </div>
     </div>
 
     <script src="../apiDataProvider/js/dataProvider.js"></script>
     <script src="elements/card/js/data/cardData.js"></script>
+    <script src="elements/tabs/tabManager.js"></script>
     <script src="elements/card/js/cardDataManager.js"></script>
 
     <script src="elements/userPanel/js/data/userData.js"></script>
