@@ -39,4 +39,7 @@ public interface CardRepository extends JpaRepository<Card, Long>{
             @Param("userPatronymic") String userPatronymic,
             Pageable pageable
     );
+    
+    @Query("SELECT c FROM Card c WHERE c.user.login = :userLogin AND c.id = :cardId")
+    public Optional<Card> getCardByUserLoginAndCardId(@Param("userLogin") String userLogin, @Param("cardId") Long cardId);
 }

@@ -278,4 +278,24 @@ public class CardService extends ExtendedUniversalWriteEndpointsService<Card, Ca
     protected CardDto toDto(Card obj) {
         return new CardDto(obj); //конкретная реализация из абстрактного класса.
     }
+    
+    /**
+     * Взять обьект карты, по ее id и логину пользователя,
+     * гарантируем, что выбранная карта принадлежит текущему пользователю
+     * (для взятия транзакций карты в CardTransferService).
+     * @param userLogin Логин текущего пользователя.
+     * @param cardId Id карты пользователя.
+     * @return 
+     */
+    public Card getCardByUserLoginAndCardId(String userLogin, Long cardId)
+    {
+        Optional<Card> card = cardRepository.getCardByUserLoginAndCardId(userLogin, cardId);
+        
+        if(card.isPresent())
+        {
+            return card.get();
+        } else {
+            return null;
+        }
+    }
 }

@@ -8,8 +8,14 @@ import com.mycompany.cardapiservice.repository.CardRepository;
 import com.mycompany.cardapiservice.repository.CardTransferRepository;
 import com.mycompany.cardapiservice.repository.UserRepository;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 /**
@@ -101,5 +107,33 @@ public class CardTransferService {
         }
         
         return true;
+    }
+    
+    /**
+     * Взять все транзакции карты по ее id у текущего пользователя с пагинацией. 
+     * @param userAuthData Данные пользователя.
+     * @param idCard Id карты пользователя
+     * @param pageable Пагинация.
+     * @return Лист транзакций выбранной карты.
+     */
+    public List<CardTransferDto> getAllTransfersByCardIdAndUser(
+            Authentication userAuthData,
+            Long idCard,
+            Pageable pageable
+    ) {
+        Card currentCard = cardService.getCardByUserLoginAndCardId(userAuthData.getName(), idCard);
+        
+        if(currentCard != null)
+        {
+            Page<CardTransfer> cardTransfers = cardTransferRepository.getTransactionsByCardId(currentCard, pageable);
+            
+            return cardTransfers.stream().map((cardTransfer) -> {
+                return new CardTransferDto(cardTransfer);
+            })
+            .collect(Collectors.toList());
+            
+        } else {
+            throw new AccessDeniedException("У вас нет доступа к карте с id " + idCard);
+        }
     }
 }
