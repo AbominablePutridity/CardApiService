@@ -58,13 +58,35 @@ function setTabForCardTranzactions(cardId, page, size)
         sessionStorage.getItem('jwtToken'), // берем наш токен из сессии
         `api/cardTransfer/user/getAllTransfersToUserCard?page=${page}&size=${size}&idUserCard=${cardId}`,
         
-    ).done(function(data) {
+    ).done(function(data) { // блок с успешным получением данных
         // ДАННЫЕ ЗДЕСЬ!
         console.log("All tranzactions = ", data);
 
         dataForRendering = data; //приравниваем данные из api в массив dataForRendering, из которых будем брать данные о транзакциях
 
+        div.innerHTML = 
+        `
+        <div class="items-container">
+        ${dataForRendering.map(item => `
+            <div class="item">
+            <h3 class="main-title">${item.description}</h3>
+            <p class="info-text">
+                <h1> ${item.amountOfMoney} </h1>
+            </p>
+
+            <p class="info-details">
+                Счет получателя: ${item.receiverDto.number} </br>
+                Отправитель: ${item.senderDto.userDto.surname} ${item.senderDto.userDto.name} ${item.senderDto.userDto.patronymic}</br>
+                Получатель: ${item.receiverDto.userDto.surname} ${item.receiverDto.userDto.name} ${item.receiverDto.userDto.patronymic}</br>
+            </p>
+            
+            <span class="date">${item.transferDate}</span>
+            </div>
+            <hr>
+        `).join('')}
+        </div>
+        `;
     }).fail(function() {
-        alert("Shown transactions failed!");
+        alert("Для получения транзакций карты сначала необходимо выбрать карту!");
     });
 }

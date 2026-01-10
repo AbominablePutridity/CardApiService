@@ -1,4 +1,4 @@
-//Скрипт с методами отрисовки данных карт пользователя на главной
+//Скрипт с методами отрисовки и получения данных карт пользователя на главной
 
 // 1. Находим контейнер, куда будем вставлять карты
 const cardList = document.querySelector('.card-list');
@@ -60,18 +60,53 @@ btnBack = document.getElementById("pag-card-button-back");
 btnForward = document.getElementById("pag-card-button-forward");
 
 btnBack.addEventListener('click', function(event) {
-        if(currentPage != 1) {
+        if(currentPage != 0) {
             currentPage--;
 
-            renderCards(currentPage);
+            //берем данные о картах нашего пользователя из API
+            dataGet(
+                sessionStorage.getItem('jwtToken'), // берем наш токен из сессии
+                `api/card/user/getAllCards?page=${currentPage}&size=${itemsPerPage}&isHideCardNumber=true`,
+                
+            ).done(function(data) {
+                // ДАННЫЕ ЗДЕСЬ!
+                console.log("The data = ", data);
+
+                cardsData = data; //приравниваем данные из api в массив cardsData, из которых будем брать данные о картах пользователя на отрисовку
+
+                // Вызов функции для откисовки (карт) полученых данных из текущего запроса на HTML страницу
+                // (т.к. блок .done - область видимости полученых данных из запроса)
+                renderCards(currentPage+1);
+            }).fail(function() {
+                alert("Login failed!");
+            });
         }
 });
 
 btnForward.addEventListener('click', function(event) {
-        if((cardsData.length / currentPage) > currentPage) {
+        // Вычисляем общее количество страниц
+        const totalPages = Math.ceil(cardsData.length / itemsPerPage);
+        
+        if(currentPage < totalPages) {
             currentPage++;
 
-            renderCards(currentPage);
+            //берем данные о картах нашего пользователя из API
+            dataGet(
+                sessionStorage.getItem('jwtToken'), // берем наш токен из сессии
+                `api/card/user/getAllCards?page=${currentPage}&size=${itemsPerPage}&isHideCardNumber=true`,
+                
+            ).done(function(data) {
+                // ДАННЫЕ ЗДЕСЬ!
+                console.log("The data = ", data);
+
+                cardsData = data; //приравниваем данные из api в массив cardsData, из которых будем брать данные о картах пользователя на отрисовку
+
+                // Вызов функции для откисовки (карт) полученых данных из текущего запроса на HTML страницу
+                // (т.к. блок .done - область видимости полученых данных из запроса)
+                renderCards(currentPage);
+            }).fail(function() {
+                alert("Login failed!");
+            });
         }
 });
 
