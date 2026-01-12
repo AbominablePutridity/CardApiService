@@ -6,6 +6,8 @@ import com.mycompany.cardapiservice.entity.Card;
 import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.CardRepository;
 import com.mycompany.cardapiservice.repository.UserRepository;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,32 +84,54 @@ public class CardService extends ExtendedUniversalWriteEndpointsService<Card, Ca
      * @param amount Количество переводимых денег.
      * @return переведен успешно - true, не переведен - false.
      */
-    public boolean transferMoney(Card sender, Card receiver, Long amount)
+    public boolean transferMoney(Card sender, Card receiver, BigDecimal amount)
     {
         try {
             //TODO: СДЕЛАТЬ ПРОВЕРКУ СЧЕТА НА КОРРЕКТНЫЕ ЗНАЧЕНИЯ СУММЫ ПЕРЕВОДА!!! 
             //если введено количество переводимых денег с карты пользователя меньше чем денег на самой карте пользователя,
             //то делаем транзакцию отправки денег, иначе выводим
-            if((sender.getBalance() > amount) && (amount > 0)) {
+            if (sender.getBalance().compareTo(amount) > 0 && amount.compareTo(BigDecimal.ZERO) > 0) {
+                /* balance > amount И amount > 0
+                - Методы compareTo() возвращают:
+                    -1 — если первый объект МЕНЬШЕ второго
 
-                //если карта отправителя не заблокированна
-                if(!sender.getIsIsBlocked()) {
-                    //Отнимаем деньги у пользователся в связи с переводом
-                    sender.setBalance(sender.getBalance() - amount);
-                    cardRepository.save(sender);
-                } else {
-                    System.err.println("ОШИБКА: Карта отправителя заблокированна, перевод не выполнен!");
-                    
-                    return false;
-                }
+                    0 — если объекты РАВНЫ
 
-                //если карта получателя не заблокированна
-                if(!receiver.getIsIsBlocked()) {
-                    //Прибавляем сумму перевода на катру получателя
-                    receiver.setBalance(receiver.getBalance() + amount);
-                    cardRepository.save(receiver);
+                    1 — если первый объект БОЛЬШЕ второго
+                */
+                
+                
+                //если карты отправителя и получателя не заблокированны
+                if(!sender.getIsIsBlocked() && !receiver.getIsIsBlocked()) {
+                    //если валюты карт отправителя и получчателя совпадают - делаем перевод средств
+                    if(sender.getCurrency().getSign().equals(receiver.getCurrency().getSign()))
+                    {
+                        //Отнимаем деньги у пользователся в связи с переводом
+                        sender.setBalance(sender.getBalance().subtract(amount));
+                        cardRepository.save(sender);
+
+                        //Прибавляем сумму перевода на катру получателя
+                        receiver.setBalance(receiver.getBalance().add(amount));
+                        cardRepository.save(receiver);
+                    } else {
+                        //если валюты отправителя и получателя разные - перед отправкой получателю конвертируем валюту отправителя в валюту получателя
+                        BigDecimal priceForTransfer = (amount.multiply(receiver.getCurrency().getRublePrice())).divide(sender.getCurrency().getRublePrice(), 2, RoundingMode.HALF_UP);
+                        
+                        System.out.println("Сумма " + amount + "" + sender.getCurrency().getSign() + " при переводе в " + receiver.getCurrency().getSign()
+                                + " равна " + priceForTransfer + "" + receiver.getCurrency().getSign()     
+                        );
+                        
+                        //переводим конвертированную валюту получателю:
+                        //Отнимаем деньги у пользователся в связи с переводом
+                        sender.setBalance(sender.getBalance().subtract(amount));
+                        cardRepository.save(sender);
+
+                        //Прибавляем сумму перевода на катру получателя
+                        receiver.setBalance(receiver.getBalance().add(priceForTransfer));
+                        cardRepository.save(receiver);
+                    }
                 } else {
-                    System.err.println("ОШИБКА: Карта получателя заблокированна, перевод не выполнен!");
+                    System.err.println("ОШИБКА: Карта отправителя или получателя заблокированна, перевод не выполнен!");
                     
                     return false;
                 }

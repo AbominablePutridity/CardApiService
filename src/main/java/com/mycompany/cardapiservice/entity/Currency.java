@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class Currency {
     
     @Column(name = "name")
     private String name;
+    
+    @Column(name = "ruble_price")
+    private BigDecimal rublePrice;
     
     @OneToMany(mappedBy = "currency", cascade = CascadeType.ALL)
     private List<Card> cards = new ArrayList<>();
@@ -61,5 +65,13 @@ public class Currency {
 
     public void setCards(List<Card> cards) {
         this.cards = cards;
+    }
+
+    public BigDecimal getRublePrice() {
+        return rublePrice;
+    }
+
+    public void setRublePrice(BigDecimal rublePrice) {
+        this.rublePrice = rublePrice;
     }
 }

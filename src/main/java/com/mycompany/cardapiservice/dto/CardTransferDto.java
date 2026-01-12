@@ -1,6 +1,7 @@
 package com.mycompany.cardapiservice.dto;
 
 import com.mycompany.cardapiservice.entity.CardTransfer;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -10,7 +11,7 @@ public class CardTransferDto {
     private Long id;
     private CardDto senderDto;
     private CardDto receiverDto;
-    private Long amountOfMoney;
+    private BigDecimal amountOfMoney;
     private String description;
     private boolean isTransfered;
     private LocalDate transferDate;
@@ -52,11 +53,11 @@ public class CardTransferDto {
         this.receiverDto = receiverDto;
     }
 
-    public Long getAmountOfMoney() {
+    public BigDecimal getAmountOfMoney() {
         return amountOfMoney;
     }
 
-    public void setAmountOfMoney(Long amountOfMoney) {
+    public void setAmountOfMoney(BigDecimal amountOfMoney) {
         this.amountOfMoney = amountOfMoney;
     }
 

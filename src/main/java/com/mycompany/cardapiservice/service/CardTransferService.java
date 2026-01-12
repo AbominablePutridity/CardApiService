@@ -7,6 +7,7 @@ import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.CardRepository;
 import com.mycompany.cardapiservice.repository.CardTransferRepository;
 import com.mycompany.cardapiservice.repository.UserRepository;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class CardTransferService {
             Card receiverCard = cardService.getCardByNumber(cardTransferData.getReceiverDto().getNumber());
                 
             //данные о переводе
-            Long amount = cardTransferData.getAmountOfMoney(); //количество переводимых денег
+            BigDecimal amount = cardTransferData.getAmountOfMoney(); //количество переводимых денег
             String description = cardTransferData.getDescription(); //сообщение получателю от отправителя денег
         
             if(cardService.transferMoney(senderCard, receiverCard, amount)) {
@@ -84,7 +85,7 @@ public class CardTransferService {
      * @return транзакция пройдена - true, не пройдена - false.
      */
     public boolean saveNewTranzactionTransferMoney(
-            Long amount,
+            BigDecimal amount,
             String desctiption,
             Card sender,
             Card receiver

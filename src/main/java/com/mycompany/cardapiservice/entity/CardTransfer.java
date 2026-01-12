@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -27,7 +28,7 @@ public class CardTransfer {
     private Card receiver;
     
     @Column(name = "amount_of_money")
-    private Long amountOfMoney;
+    private BigDecimal amountOfMoney;
     
     @Column(name = "description")
     private String description;
@@ -62,11 +63,11 @@ public class CardTransfer {
         this.receiver = receiver;
     }
 
-    public Long getAmountOfMoney() {
+    public BigDecimal getAmountOfMoney() {
         return amountOfMoney;
     }
 
-    public void setAmountOfMoney(Long amountOfMoney) {
+    public void setAmountOfMoney(BigDecimal amountOfMoney) {
         this.amountOfMoney = amountOfMoney;
     }
 

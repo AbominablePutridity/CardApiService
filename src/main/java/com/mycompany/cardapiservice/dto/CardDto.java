@@ -2,6 +2,7 @@ package com.mycompany.cardapiservice.dto;
 
 import com.mycompany.cardapiservice.dto.interfaces.TransferableDtoToEntity;
 import com.mycompany.cardapiservice.entity.Card;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -11,7 +12,7 @@ public class CardDto implements TransferableDtoToEntity<Card> {
     private Long id;
     private String number;
     private LocalDate validityPeriod;
-    private Long balance;
+    private BigDecimal balance;
     private UserDto userDto;
     private StatusCardDto statusCardDto;
     private CurrencyDto currencyDto;
@@ -55,11 +56,11 @@ public class CardDto implements TransferableDtoToEntity<Card> {
         this.validityPeriod = validityPeriod;
     }
 
-    public Long getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Long balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
