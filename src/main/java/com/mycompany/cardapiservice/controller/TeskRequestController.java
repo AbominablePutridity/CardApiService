@@ -88,9 +88,41 @@ public class TeskRequestController {
         );
     }
     
-    @GetMapping("/admin/getAllTaskRequest")
+    @GetMapping("/user/getAllTasksByCurrentUser")
     @Operation(
         summary = "Получить список задач по пагинации", 
+        description = "Возвращает список задач"
+    )
+    @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)
+            in = ParameterIn.HEADER,
+            name = "X-Api-Token", //ключ заголовка
+            description = "Введите JWT-токен сюда (Bearer <JWT-tocken>)", //надпись над полем
+            required = false
+    )
+    public List<TaskRequestDto> getAllTasksByCurrentUser(
+            @Parameter(
+                description = "Номер страницы (начинается с 0)",
+                example = "0"
+            )
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            
+            @Parameter(
+                description = "Размер страницы",
+                example = "10"
+            )
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            
+            Authentication currentUser
+    )
+    {
+        Pageable pageable = PageRequest.of(page, size);
+        
+        return taskRequestService.getTasksForCurrentUser(pageable, userService.getCurrentUserByLogin(currentUser.getName()));
+    }
+    
+    @GetMapping("/admin/getAllTaskRequest")
+    @Operation(
+        summary = "Получить список задач текущего пользователя по пагинации", 
         description = "Возвращает список задач"
     )
     @Parameter( // параметр, создающий поле заголовка для токена пользователя JWT (В сервисе JwtFilter берем если основной заголовок является пустым)

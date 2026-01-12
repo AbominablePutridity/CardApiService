@@ -7,6 +7,10 @@ import com.mycompany.cardapiservice.entity.User;
 import com.mycompany.cardapiservice.repository.OperationRepository;
 import com.mycompany.cardapiservice.repository.TaskRequestRepository;
 import com.mycompany.cardapiservice.repository.TaskStatusRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,28 @@ public class TaskRequestService extends ExtendedUniversalWriteEndpointsService<T
         this.userService = userService;
     }
     
+    /**
+     * Взять все заявки, отправленные пользователем.
+     * @param pageable Пагинация.
+     * @param currentUser Обьект текущего пользователя.
+     * @return Страница со списком заявок пользователей.
+     */
+    public List<TaskRequestDto> getTasksForCurrentUser(Pageable pageable, User currentUser)
+    {
+        Page<TaskRequest> pageWithUsersTasks =  taskRequestRepository.getTasksForCurrentUser(currentUser, pageable);
+        
+        return pageWithUsersTasks.stream().map((task) -> {
+            return new TaskRequestDto(task);
+        })
+        .collect(Collectors.toList());
+    }
+    
+    /**
+     * Создание заявки текущим пользователем.
+     * @param taskRequestDto Данные заявки.
+     * @param currentUser Текущий пользователь, создающий заявку.
+     * @return Статус создания заявки.
+     */
     public ResponseEntity<?> createTask(TaskRequestDto taskRequestDto, User currentUser)
     {
         TaskRequest newTaskRequest = new TaskRequest();
@@ -54,7 +80,7 @@ public class TaskRequestService extends ExtendedUniversalWriteEndpointsService<T
     }
 
     /**
-     * Обновить пользователя (заменить данные обьекта, или его целиком - в зависимости от isSaveByPart).
+     * Обновить задачу (заменить данные обьекта, или его целиком - в зависимости от isSaveByPart).
      * @param idTaskRequestForUpdate Id задачи для обновления.
      * @param refreshedTaskRequest Обьект задачи для обновления.
      * @param isSaveByPart
