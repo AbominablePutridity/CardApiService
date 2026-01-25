@@ -124,5 +124,5 @@ buttonCardInfo.addEventListener('click', function() {
 let buttonTranzaction = document.getElementById("tab2");
 buttonTranzaction.addEventListener('click', function() {
     console.log("DDDDATA- ", cardsData.find(item => item.id == getCurrentCardId()).number);
-   setTabForCardTranzactions(getCurrentCardId(), 0, 10, "4111111111111111"/*cardsData.find(item => item.id == getCurrentCardId()).number*/); // тут data - это один конкретный обьект из за цикла!!!
+   setTabForCardTranzactions(getCurrentCardId(), 0, 10); // тут data - это один конкретный обьект из за цикла!!!
 });

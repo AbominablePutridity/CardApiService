@@ -120,10 +120,6 @@ function setTabForCardTranzactions(cardId, page, size, senderNumberCard) {
 
             let tranzactToReceiver = document.getElementById("closeButtonModelWindow"); //кнопка перевода средств получателю
 
-            console.log("DDDDATA22- ", senderNumberCard);
-            
-            let senderLabel = document.getElementById("senderLabel");
-            senderLabel.textContent = senderNumberCard;
 
             tranzactToReceiver.onclick = function() {
                 
@@ -138,8 +134,7 @@ function setTabForCardTranzactions(cardId, page, size, senderNumberCard) {
                     {
                         "senderDto": {
                             //"number": 
-                            "id": cardId,
-                            "number": senderNumberCard,
+                            "id": cardId
                         },
                         "receiverDto": {
                             "number": receiverCardNumberField
