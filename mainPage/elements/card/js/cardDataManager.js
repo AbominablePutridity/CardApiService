@@ -6,6 +6,8 @@ const cardList = document.querySelector('.card-list');
 // 2. Находим сам шаблон
 const template = document.querySelector('#card-template');
 
+document.getElementById("modelWindow").style.display = "none"; // при старте программы - скрываем модальное окно
+
 /**
  * Создание/Отрисовка данных карт после получения массивов с данными о картах пользователя.
  * (Вызываем ТОЛЬКО после получения данных о картах, в файле cardData.js - после получения данных карт:
@@ -121,5 +123,6 @@ buttonCardInfo.addEventListener('click', function() {
 // обработчик кнопок управления вкладками вне функции - для того чтобы не вешался несколько раз, каждый раз когда вызывается функция
 let buttonTranzaction = document.getElementById("tab2");
 buttonTranzaction.addEventListener('click', function() {
-   setTabForCardTranzactions(getCurrentCardId(), 0, 10); // тут data - это один конкретный обьект из за цикла!!!
+    console.log("DDDDATA- ", cardsData.find(item => item.id == getCurrentCardId()).number);
+   setTabForCardTranzactions(getCurrentCardId(), 0, 10, "4111111111111111"/*cardsData.find(item => item.id == getCurrentCardId()).number*/); // тут data - это один конкретный обьект из за цикла!!!
 });

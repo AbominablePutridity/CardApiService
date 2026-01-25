@@ -57,7 +57,7 @@ function setTabForCardData(data)
  * @param page Страница (для пагинации).
  * @param size Количество элементов на странице (для пагинации).
  */
-function setTabForCardTranzactions(cardId, page, size) {
+function setTabForCardTranzactions(cardId, page, size, senderNumberCard) {
     console.log(`Запрос: cardId=${cardId}, page=${page}, size=${size}`);
     
     dataGet(
@@ -69,6 +69,8 @@ function setTabForCardTranzactions(cardId, page, size) {
         // ПРОСТО отрисовываем что получили
         div.innerHTML = 
         `
+        <button id="setTranzactButton">Совершить перевод</button>
+        
         <div class="items-container">
         ${data.map(item => `
             <div class="item">
@@ -97,6 +99,7 @@ function setTabForCardTranzactions(cardId, page, size) {
         // ВЕШАЕМ ОБРАБОТЧИКИ ПРЯМО СЕЙЧАС
         const btnBack = document.getElementById("pag-tranz-button-back");
         const btnForward = document.getElementById("pag-tranz-button-forward");
+        const btnTranzact = document.getElementById("setTranzactButton"); //кнопка перевода денег
         
         // КНОПКА "НАЗАД" - запрос с page-1
         btnBack.onclick = function() {
@@ -108,6 +111,46 @@ function setTabForCardTranzactions(cardId, page, size) {
         btnForward.onclick = function() {
             console.log("Нажата кнопка Вперед!");
             setTabForCardTranzactions(cardId, page + 1, size);
+        };
+
+        // КНОПКА "СОВЕРШИТЬ ПЕРЕВОД"
+        btnTranzact.onclick = function() {
+            console.log("Нажата кнопка Совершения перевода!");
+            document.getElementById("modelWindow").style.display = "block";
+
+            let tranzactToReceiver = document.getElementById("closeButtonModelWindow"); //кнопка перевода средств получателю
+
+            console.log("DDDDATA22- ", senderNumberCard);
+            
+            let senderLabel = document.getElementById("senderLabel");
+            senderLabel.textContent = senderNumberCard;
+
+            tranzactToReceiver.onclick = function() {
+                
+                
+                let receiverCardNumberField = document.getElementById("receiverCardNumberField").value;
+                let moneyToRecieverField = document.getElementById("moneyToRecieverField").value;
+                let descriptionToReceiverField = document.getElementById("descriptionToReceiverField").value;
+
+                dataPost(
+                    sessionStorage.getItem('jwtToken'), // берем наш токен из сессии
+                    `api/cardTransfer/user/transfer`,
+                    {
+                        "senderDto": {
+                            //"number": 
+                            "id": cardId,
+                            "number": senderNumberCard,
+                        },
+                        "receiverDto": {
+                            "number": receiverCardNumberField
+                        },
+                        "amountOfMoney": moneyToRecieverField,
+                        "description": descriptionToReceiverField
+                    }
+                );
+                
+                document.getElementById("modelWindow").style.display = "none";
+            }
         };
         
     }).fail(function() {

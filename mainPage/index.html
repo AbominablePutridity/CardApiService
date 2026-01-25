@@ -51,6 +51,18 @@
         <span id="page-info"> Страница 1 </span>
         <button id="pag-card-button-forward">Вперед →</button>
     </div>
+
+    <!--Модальное окно для переводов-->
+    <div id="modelWindow" style="display:none; border:1px solid black; padding:20px;">
+        <p>Номер карты отправителя: </p> <p id="senderLabel"></p>
+        <p>Номер карты получателя: </p>
+        <input id="receiverCardNumberField" type="text" placeholder="Номер карты"></br>
+        <p>Сумма отправки средств: </p>
+        <input id="moneyToRecieverField" type="text" placeholder="Сумма средств для перевода"></br>
+        <p>Сообщение к переводу: </p>
+        <input id="descriptionToReceiverField" type="text" placeholder="Сообщение для получателя"></br>
+        <button id="closeButtonModelWindow">Закрыть окно</button>
+    </div>
     
     <!--Основные вкладки-->
     <div class="tabs default-panel">
