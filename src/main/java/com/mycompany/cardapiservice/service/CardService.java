@@ -78,72 +78,88 @@ public class CardService extends ExtendedUniversalWriteEndpointsService<Card, Ca
     }
     
     /**
-     * Метод с переводом денег с карты на карту.
-     * @param sender Карта отправителя.
-     * @param receiver Карта получателя.
-     * @param amount Количество переводимых денег.
-     * @return переведен успешно - true, не переведен - false.
-     */
-    public boolean transferMoney(Card sender, Card receiver, BigDecimal amount)
-    {
-        try {
-            //TODO: СДЕЛАТЬ ПРОВЕРКУ СЧЕТА НА КОРРЕКТНЫЕ ЗНАЧЕНИЯ СУММЫ ПЕРЕВОДА!!! 
-            //если введено количество переводимых денег с карты пользователя меньше чем денег на самой карте пользователя,
-            //то делаем транзакцию отправки денег, иначе выводим
-            if (sender.getBalance().compareTo(amount) > 0 && amount.compareTo(BigDecimal.ZERO) > 0) {
-                /* balance > amount И amount > 0
-                - Методы compareTo() возвращают:
-                    -1 — если первый объект МЕНЬШЕ второго
+    * Метод с переводом денег с карты на карту.
+    * @param sender Карта отправителя.
+    * @param receiver Карта получателя.
+    * @param amount Количество переводимых денег.
+    * @return переведен успешно - true, не переведен - false.
+    */
+   public boolean transferMoney(Card sender, Card receiver, BigDecimal amount)
+   {
+       try {
+           //TODO: СДЕЛАТЬ ПРОВЕРКУ СЧЕТА НА КОРРЕКТНЫЕ ЗНАЧЕНИЯ СУММЫ ПЕРЕВОДА!!! 
+           //если введено количество переводимых денег с карты пользователя меньше чем денег на самой карте пользователя,
+           //то делаем транзакцию отправки денег, иначе выводим
+           if (sender.getBalance().compareTo(amount) > 0 && amount.compareTo(BigDecimal.ZERO) > 0) {
+               /* balance > amount И amount > 0
+               - Методы compareTo() возвращают:
+                   -1 — если первый объект МЕНЬШЕ второго
+                   0 — если объекты РАВНЫ
+                   1 — если первый объект БОЛЬШЕ второго
+               */
 
-                    0 — если объекты РАВНЫ
+               //если карты отправителя и получателя не заблокированны
+               if(!sender.getIsIsBlocked() && !receiver.getIsIsBlocked()) {
+                   //если валюты карт отправителя и получателя совпадают - делаем перевод средств
+                   if(sender.getCurrency().getSign().equals(receiver.getCurrency().getSign()))
+                   {
+                       //Отнимаем деньги у пользователя в связи с переводом
+                       sender.setBalance(sender.getBalance().subtract(amount));
+                       cardRepository.save(sender);
 
-                    1 — если первый объект БОЛЬШЕ второго
-                */
-                
-                
-                //если карты отправителя и получателя не заблокированны
-                if(!sender.getIsIsBlocked() && !receiver.getIsIsBlocked()) {
-                    //если валюты карт отправителя и получчателя совпадают - делаем перевод средств
-                    if(sender.getCurrency().getSign().equals(receiver.getCurrency().getSign()))
-                    {
-                        //Отнимаем деньги у пользователся в связи с переводом
-                        sender.setBalance(sender.getBalance().subtract(amount));
-                        cardRepository.save(sender);
+                       //Прибавляем сумму перевода на карту получателя
+                       receiver.setBalance(receiver.getBalance().add(amount));
+                       cardRepository.save(receiver);
 
-                        //Прибавляем сумму перевода на катру получателя
-                        receiver.setBalance(receiver.getBalance().add(amount));
-                        cardRepository.save(receiver);
-                    } else {
-                        //если валюты отправителя и получателя разные - перед отправкой получателю конвертируем валюту отправителя в валюту получателя
-                        BigDecimal priceForTransfer = (amount.multiply(receiver.getCurrency().getRublePrice())).divide(sender.getCurrency().getRublePrice(), 2, RoundingMode.HALF_UP);
-                        
-                        System.out.println("Сумма " + amount + "" + sender.getCurrency().getSign() + " при переводе в " + receiver.getCurrency().getSign()
-                                + " равна " + priceForTransfer + "" + receiver.getCurrency().getSign()     
-                        );
-                        
-                        //переводим конвертированную валюту получателю:
-                        //Отнимаем деньги у пользователся в связи с переводом
-                        sender.setBalance(sender.getBalance().subtract(amount));
-                        cardRepository.save(sender);
+                       System.out.println("Перевод в одинаковой валюте: " + amount + " " + sender.getCurrency().getSign());
+                   } 
+                   else 
+                   {
+                       // ВАЖНО: Исправленная формула конвертации!
+                       // 1. Конвертируем сумму отправителя в РУБЛИ (базовую валюту)
+                       BigDecimal amountInRubles = amount.multiply(sender.getCurrency().getRublePrice());
 
-                        //Прибавляем сумму перевода на катру получателя
-                        receiver.setBalance(receiver.getBalance().add(priceForTransfer));
-                        cardRepository.save(receiver);
-                    }
-                } else {
-                    System.err.println("ОШИБКА: Карта отправителя или получателя заблокированна, перевод не выполнен!");
-                    
-                    return false;
-                }
-            }
-        } catch (Throwable t) {
-            System.err.println("ОШИБКА: CardService.transferMoney() - обьект перевода денег не был сохранен - " + t.getMessage());
-            
-            return false;
-        }
-        
-        return true;
-    }
+                       // 2. Конвертируем из рублей в валюту получателя
+                       BigDecimal priceForTransfer = amountInRubles.divide(
+                           receiver.getCurrency().getRublePrice(), 
+                           2, 
+                           RoundingMode.HALF_UP
+                       );
+
+                       System.out.println("Конвертация валют:");
+                       System.out.println("  Отправитель: " + amount + " " + sender.getCurrency().getSign());
+                       System.out.println("  В рублях: " + amountInRubles + " RUB");
+                       System.out.println("  Курс отправителя: 1 " + sender.getCurrency().getSign() + " = " + sender.getCurrency().getRublePrice() + " RUB");
+                       System.out.println("  Курс получателя: 1 " + receiver.getCurrency().getSign() + " = " + receiver.getCurrency().getRublePrice() + " RUB");
+                       System.out.println("  Получателю: " + priceForTransfer + " " + receiver.getCurrency().getSign());
+
+                       // Отнимаем деньги у отправителя
+                       sender.setBalance(sender.getBalance().subtract(amount));
+                       cardRepository.save(sender);
+
+                       // Прибавляем КОНВЕРТИРОВАННУЮ сумму получателю
+                       receiver.setBalance(receiver.getBalance().add(priceForTransfer));
+                       cardRepository.save(receiver);
+                   }
+
+                   return true;
+               } 
+               else {
+                   System.err.println("ОШИБКА: Карта отправителя или получателя заблокирована, перевод не выполнен!");
+                   return false;
+               }
+           }
+           else {
+               System.err.println("ОШИБКА: Недостаточно средств или некорректная сумма перевода!");
+               return false;
+           }
+       } 
+       catch (Throwable t) {
+           System.err.println("ОШИБКА: CardService.transferMoney() - перевод не выполнен - " + t.getMessage());
+           t.printStackTrace();
+           return false;
+       }
+   }
     
     /**
      * Взять карты пользователя по его данным.
