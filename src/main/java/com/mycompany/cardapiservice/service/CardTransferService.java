@@ -45,7 +45,13 @@ public class CardTransferService {
         // для этого из обьекта возьмем номер карты и проверим какой у нее пользователь
         
         //карта отправителя
-        Card senderCard = cardService.getCardByNumber(cardTransferData.getSenderDto().getNumber());
+        Card senderCard = null;
+        
+        if(cardService.getCardByNumber(cardTransferData.getSenderDto().getNumber()) != null) {
+            senderCard = cardService.getCardByNumber(cardTransferData.getSenderDto().getNumber());
+        } else {
+            senderCard = cardService.getCardById(cardTransferData.getSenderDto().getId());
+        }
         
         //если пользователь карты эквивалентен текущему пользователю портала, то проводим транзакцию перевода
         //иначе выводим ограничение доступа с сообщением.
